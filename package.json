@@ -1,0 +1,54 @@
+{
+  "name": "cve-utils",
+  "version": "0.0.2",
+  "description": "A set of utilities for working with CVEs in JS/TS",
+  "type": "module",
+  "engines": {
+    "node": ">= 16.20 <17"
+  },
+  "devDependencies": {
+    "@types/jest": "~27.5",
+    "@types/node": "~16",
+    "@typescript-eslint/eslint-plugin": "~5.26",
+    "@typescript-eslint/parser": "~5.26",
+    "eslint": "~8.16",
+    "eslint-config-prettier": "~8.5",
+    "eslint-plugin-jest": "~26.2",
+    "jest": "~28.1",
+    "prettier": "~2.6",
+    "rimraf": "~3.0",
+    "ts-jest": "~28.0",
+    "tsutils": "~3.21",
+    "typescript": "~4.7"
+  },
+  "scripts": {
+    "start": "node build/src/main.js",
+    "clean": "rimraf coverage build tmp dist release",
+    "build": "npx ncc build ./src/main.ts --out dist --source-map --watch",
+    "build:release": "npx ncc build ./src/main.ts --out release --minify",
+    "lint": "eslint . --ext .ts --ext .mts",
+    "test": "jest --watch",
+    "test-serial": "jest --runInBand --watch",
+    "prettier": "prettier --config .prettierrc --write .",
+    "coverage": "jest --coverage"
+  },
+  "author": "Howard Kong <hkong@mitre.org>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@commander-js/extra-typings": "^10.0.2",
+    "@vercel/ncc": "^0.36.1",
+    "adm-zip": "^0.5.10",
+    "axios": "^0.27.2",
+    "commander": "^10.0.0",
+    "date-fns": "^2.29.3",
+    "date-fns-tz": "^2.0.0",
+    "dotenv": "^16.0.1",
+    "lodash": "^4.17.21",
+    "octokit": "^2.0.14",
+    "simple-git": "^3.17.0",
+    "tslib": "~2.4"
+  },
+  "volta": {
+    "node": "16.13.0"
+  }
+}
