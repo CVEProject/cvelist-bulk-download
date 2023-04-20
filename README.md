@@ -47,27 +47,24 @@ should do it. However, there are times, when tests in `git.serial-test.ts` fail 
 
 ## Environment Variables and Secrets
 
-There are 3 CVE-related "secret" environment variables: `CVE_API_KEY`, `CVE_API_ORG`, and `CVE_API_USER`. These are defined at [CveProject/cvelistV5/Settings](https://github.com/CVEProject/cvelistV5/settings/environments/892781747/edit) when deployed to CVEProject/cvelistV5, and in `.env` for local development. Note that some CLI functions may not work if your account does not have the right permissions.
-
-Other useful environment variables are for Github interactions:
-
-- `GH_ACCESS_TOKEN` - generate one at https://github.com/settings/keys (your account settings)
-- `GH_OWNER` - this should be `CVEProject` for the project (unless you are using a fork for testing)
-- `GH_REPO` - this should be `cvelistV5`
+There are 3 CVE-related "secret" environment variables: `CVE_API_KEY`, `CVE_API_ORG`, and `CVE_API_USER`. These are defined at 
+   - [CveProject/cvelistV5/Settings](https://github.com/CVEProject/cvelistV5/settings/environments/892781747/edit) when deployed to CVEProject/cvelistV5
+   - in `.env` for local development. Note that some CLI functions may not work if your account does not have the right permissions.
 
 ## Available Scripts
 
-- `clean` - remove coverage data, Jest cache and transpiled files,
+- `clean` - remove coverage data, Jest cache and transpiled files
 - `build` - builds and watches for file changes (used during development)
 - `build:release` - builds and minizes for runtime
-- `lint` - lint source files and tests,
-- `prettier` - reformat files,
-- `test` - run tests and watches for changes,
+- `lint` - lint source files and tests
+- `prettier` - reformat files
+- `test` - continuously runs tests whenever source files change
+- `test-serial` - runs tests serially for some tests that cannot be run in parallel
 - `coverage` - uses Jest for coverage
 
 ## Additional Information
 
-This project is built using
+This project was started using
 
 1. [jsynowiec/node-typescript-boilerplate](https://github.com/jsynowiec/node-typescript-boilerplate) as a starter (8/26/2022).
    - but not using [Volta][volta]
@@ -77,29 +74,3 @@ This project is built using
 ### ES Modules
 
 This template uses native [ESM][esm]. Make sure to read [this][nodejs-esm], and [this][ts47-esm] first.
-
-[ts-badge]: https://img.shields.io/badge/TypeScript-4.7-blue.svg
-[nodejs-badge]: https://img.shields.io/badge/Node.js->=%2016.13-blue.svg
-[nodejs]: https://nodejs.org/dist/latest-v14.x/docs/api/
-[gha-badge]: https://github.com/jsynowiec/node-typescript-boilerplate/actions/workflows/nodejs.yml/badge.svg
-[gha-ci]: https://github.com/jsynowiec/node-typescript-boilerplate/actions/workflows/nodejs.yml
-[typescript]: https://www.typescriptlang.org/
-[typescript-4-7]: https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/
-[license-badge]: https://img.shields.io/badge/license-APLv2-blue.svg
-[license]: https://github.com/jsynowiec/node-typescript-boilerplate/blob/main/LICENSE
-[sponsor-badge]: https://img.shields.io/badge/♥-Sponsor-fc0fb5.svg
-[sponsor]: https://github.com/sponsors/jsynowiec
-[jest]: https://facebook.github.io/jest/
-[eslint]: https://github.com/eslint/eslint
-[wiki-js-tests]: https://github.com/jsynowiec/node-typescript-boilerplate/wiki/Unit-tests-in-plain-JavaScript
-[prettier]: https://prettier.io
-[volta]: https://volta.sh
-[volta-getting-started]: https://docs.volta.sh/guide/getting-started
-[volta-tomdale]: https://twitter.com/tomdale/status/1162017336699838467?s=20
-[gh-actions]: https://github.com/features/actions
-[repo-template-action]: https://github.com/jsynowiec/node-typescript-boilerplate/generate
-[esm]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
-[sindresorhus-esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
-[nodejs-esm]: https://nodejs.org/docs/latest-v16.x/api/esm.html
-[ts47-esm]: https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/#esm-nodejs
-[editorconfig]: https://editorconfig.org
