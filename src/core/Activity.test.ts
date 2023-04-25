@@ -3,12 +3,9 @@ import { cloneDeep } from 'lodash';
 import {
   ActivityStep,
   Activity,
-  ActivityError,
-  ActivityNotes,
   ActivityStatus,
   ActivityProps
 } from './Activity.js';
-import { ActivityLog } from './ActivityLog.js';
 import { Delta } from './Delta.js';
 dotenv.config();
 
@@ -150,15 +147,6 @@ export const activityNone: Activity = new Activity({
 });
 
 describe(`Activity`, () => {
-
-  // Act before assertions
-  beforeEach(async () => {
-  });
-
-  // Teardown (cleanup) after assertions
-  afterAll(() => {
-  });
-
 
   // default test objects ----- ----- 
 

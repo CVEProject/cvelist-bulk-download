@@ -80,9 +80,9 @@ export class CveId {
    *    [true,"CVE","1999","12xxx", "12345"]
    */
   static toComponents(cveId: string | CveId): CveIdComponents {
-    let id: string = (cveId instanceof CveId) ? cveId.id : cveId;
+    const id: string = (cveId instanceof CveId) ? cveId.id : cveId;
     // assume a tup representing an invalid CVE ID
-    let tup: CveIdComponents = [false, undefined, undefined, undefined, undefined];
+    const tup: CveIdComponents = [false, undefined, undefined, undefined, undefined];
     if (id === null || id === undefined || id?.length === 0) {
       return tup;
     }

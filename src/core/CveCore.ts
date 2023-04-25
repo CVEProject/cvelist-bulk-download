@@ -30,7 +30,7 @@ export class CveCore {
   }
 
   static fromCveMetadata(metadata: Partial<CveMetadata>): CveCore {
-    let obj = new CveCore(metadata?.cveId);
+    const obj = new CveCore(metadata?.cveId);
     obj.state = metadata?.state;
     obj.assignerOrgId = metadata?.assignerOrgId;
     obj.assignerShortName = metadata?.assignerShortName;

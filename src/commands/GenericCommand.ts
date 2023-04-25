@@ -58,7 +58,7 @@ export abstract class GenericCommand {
   /** common functions to run before run()
    *  All subclasses should call this first in the overridden run() function
   */
-  prerun(options) {
+  prerun(options): void {
     const now = new CveDate();
     if (options.display !== false) {
       console.log(`CVE Utils version ${GenericCommand.getUtilityVersion()}`);

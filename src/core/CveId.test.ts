@@ -111,7 +111,7 @@ describe(`CveId`, () => {
 
   it(`statically parses a valid cve id into a repository dir`, async () => {
     expect(CveId.getCveDir(`${kCveId}`)).toEqual(`1999/0xxx`);
-    let cveId = `CVE-1970-0001`;
+    const cveId = `CVE-1970-0001`;
     expect(CveId.getCveDir(cveId)).toEqual(`1970/0xxx`);
   });
 

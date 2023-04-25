@@ -25,7 +25,7 @@ describe(`CveDate`, () => {
 
   it(`toISOString() should output its ISO date string representation`, async () => {
     const timestamp = new Date();
-    let iso = CveDate.toISOString(timestamp);
+    const iso = CveDate.toISOString(timestamp);
     expect(iso).toMatch(timestamp.toISOString());
   });
 

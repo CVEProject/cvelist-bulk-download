@@ -152,7 +152,7 @@ export class CveUpdater {
 
     // do window
     let newStartWindow: string = startWindow;
-    let newEndWindow = endWindow;
+    const newEndWindow = endWindow;
     let step: ActivityStep | undefined;
     do {
       step = await this.getFirstCvesFrame(newStartWindow, newEndWindow, max, `${process.env.CVES_BASE_DIRECTORY}`);

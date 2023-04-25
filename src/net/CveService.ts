@@ -35,7 +35,7 @@ export class CveService extends ApiBaseService {
    * Note:  Avoid using this since it is expensive and can run as long as 15 seconds
    * @return an object with information about the CVE Services API
    */
-  async getCveSummary(): Promise<{}> {
+  async getCveSummary(): Promise<unknown> {
     const response = await this.cve({ queryString: `page=1000` });
     return {
       totalCves: response.totalCount,
@@ -63,8 +63,8 @@ export class CveService extends ApiBaseService {
 
   /** returns array of CVE that has been added/modified/deleted since timestamp window */
   async getAllCvesChangedInTimeFrame(start: string, stop: string): Promise<CveRecord[]> {
-    let cveService = new CveService();
-    let queryString = `time_modified.gt=${start}&time_modified.lt=${stop}`;
+    const cveService = new CveService();
+    const queryString = `time_modified.gt=${start}&time_modified.lt=${stop}`;
     const response = await cveService.cve({ queryString });
     let cves: CveRecord[] = [];
     response.cveRecords.forEach(obj => {
@@ -92,7 +92,7 @@ export class CveService extends ApiBaseService {
         url += `?${option.queryString.split('?')[0]}`;
       }
       // console.log(`[cve]:  url=`, url);
-      const { data, status } = await axios.default.get(
+      const { data, status } = await axios.get(
         url,
         {
           headers: this._headers

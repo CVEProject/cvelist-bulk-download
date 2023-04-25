@@ -11,7 +11,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { CveId, CveIdError } from './CveId.js';
+import { CveId } from './CveId.js';
 import { CveRecordV5, CveMetadata, Containers } from '../generated/quicktools/CveRecordV5.js';
 
 export { CveId, CveIdError } from './CveId.js';
@@ -28,7 +28,7 @@ export class CveRecord implements CveRecordV5 {
   cveMetadata: CveMetadata;
   dataType?: string;
   dataVersion?: number;
-  sourceObj: {};
+  sourceObj: unknown;
 
 
   /** reads in a proper CVE Record JSON v5 format obj (e.g., JSON.parse()'d content of a file or the response from the CVE API 2.1) 
@@ -68,7 +68,7 @@ export class CveRecord implements CveRecordV5 {
    *  @param prettyPrint boolean to set pretty printing (default is true)
    *  @returns a JSON string
    */
-  toJsonString(prettyPrint: boolean = true): string {
+  toJsonString(prettyPrint = true): string {
     if (prettyPrint) {
       return JSON.stringify(this.sourceObj, null, 4);
     }
@@ -82,7 +82,7 @@ export class CveRecord implements CveRecordV5 {
    *  @param relFilepath relative path to the file
    *  @param prettyprint boolean to set whether to pretty print the output
    */
-  writeJsonFile(relFilepath: string, prettyprint: boolean = true): void {
+  writeJsonFile(relFilepath: string, prettyprint = true): void {
     const value = this.toJsonString(prettyprint);
     const dirname = path.dirname(relFilepath);
     fs.mkdirSync(dirname, { recursive: true });
@@ -95,7 +95,7 @@ export class CveRecord implements CveRecordV5 {
    *  @param prettyprint boolean to set whether to pretty print the output
    *  @returns the full path where the file was written to
    */
-  writeToCvePath(repositoryRoot: string, prettyprint: boolean = true): string {
+  writeToCvePath(repositoryRoot: string, prettyprint = true): string {
     const fullpath = `${repositoryRoot}/${this.toCvePath()}.json`;
     this.writeJsonFile(fullpath, prettyprint);
     return fullpath;

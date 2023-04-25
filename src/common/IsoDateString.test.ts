@@ -92,14 +92,14 @@ describe(`IsoDateString`, () => {
     // millisecond defaults to .000
     const preferred = new IsoDateString("2023-03-31T01:02:03.000Z");
     const preferredJsDate = preferred.toDate();
-    let test = new IsoDateString("2023-03-31T01:02:03Z");
+    const test = new IsoDateString("2023-03-31T01:02:03Z");
     expect(preferredJsDate).toEqual(test.toDate());
     expect(test.toString()).toMatch("2023-03-31T01:02:03Z");
   });
 
 
   it("ISO date string without milliseconds remain without milliseconds after conversion", () => {
-    let test = new IsoDateString("2023-03-31T01:02:03Z");
+    const test = new IsoDateString("2023-03-31T01:02:03Z");
     expect(test.toString()).toMatch("2023-03-31T01:02:03Z");
   });
 });

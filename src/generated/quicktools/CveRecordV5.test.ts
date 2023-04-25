@@ -6,7 +6,7 @@ const kCveId = `CVE-1999-0001`;
 const kProviderOrgId = `f972b356-145d-4b2e-9a5c-b114d0982a3b`;
 // const kLastCveModifiedTime = `2022-08-25T15:56:15`;
 
-let _jsonstr = `
+const _jsonstr = `
   {
     "containers": {
         "cna": {
@@ -53,7 +53,7 @@ describe(`CveRecordV5 class`, () => {
 
   it(`converts CVE5 json into CveRecordV5 class`, async () => {
 
-    let obj: CveRecordV5 = Convert.toCve5(_jsonstr);
+    const obj: CveRecordV5 = Convert.toCve5(_jsonstr);
     expect(
       obj.containers.cna.providerMetadata.orgId
     ).toEqual(
@@ -69,8 +69,8 @@ describe(`CveRecordV5 class`, () => {
 
   it(`converts CveRecordV5 class into CVE5 json`, async () => {
 
-    let obj: CveRecordV5 = Convert.toCve5(_jsonstr);
-    let json: string = Convert.cve5ToJson(obj);
+    const obj: CveRecordV5 = Convert.toCve5(_jsonstr);
+    const json: string = Convert.cve5ToJson(obj);
     // console.log(`Convert.toCve5 -> `, json);
     expect(
       json

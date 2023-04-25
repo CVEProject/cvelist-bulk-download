@@ -62,8 +62,8 @@ export class FsUtils {
   static generateZipfile(
     filepaths: string | string[],
     resultFilepath: string,
-    zipVirtualDir: string = `files`,
-    dir: string = ''
+    zipVirtualDir = `files`,
+    dir = ''
   ) {
     console.log(`generating zip file from ${filepaths} to ${resultFilepath}`);
     // if path to resultFilepath does not exist, recursively make them

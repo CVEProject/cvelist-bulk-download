@@ -53,7 +53,7 @@ describe(`CveRecord object`, () => {
     const cve = await cveService.getCveUsingId(kCveId);
     const repositoryRoot = `${process.env.CVES_TEST_BASE_DIRECTORY}`;
     const fullPath = cve.writeToCvePath(repositoryRoot);
-    expect(FsUtils.exists(fullPath));
+    expect(FsUtils.exists(fullPath)).toBeTruthy();
   });
 
 });

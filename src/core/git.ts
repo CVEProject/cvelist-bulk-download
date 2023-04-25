@@ -155,7 +155,7 @@ export class Git {
         `${commits[commits.length - 1]}..${commits[0]}`,
         `--relative=${this.localDir}`);
       console.log(`retval from diff between commits ${commits[commits.length - 1]}..${commits[0]}:\n  ${data}`);
-      let lines: string[] = data.split('\n');
+      const lines: string[] = data.split('\n');
       // remove last empty \n
       lines.pop();
       lines.forEach(line => {

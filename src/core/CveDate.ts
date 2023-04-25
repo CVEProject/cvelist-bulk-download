@@ -95,7 +95,7 @@ export class CveDate {
    * @returns today's midnight as a Javascript Date object
    */
   static getMidnight(): Date {
-    let midnight = new Date();
+    const midnight = new Date();
     midnight.setUTCHours(0, 0, 0, 0);
     return midnight;
   }
