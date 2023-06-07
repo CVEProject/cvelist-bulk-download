@@ -10,16 +10,32 @@ This is a set of utilities for maintaining CVE records on GitHub. It is written 
 
 You will need to have NodeJS 16.x to develop and/or run this project. Then
 
-1. Be sure to create/update a `.env` file in the directory you want to run in. 
-   - See `.env-EXAMPLE` for an example of what to include
-   - You will need to replace the `<var>` variables with your own credentials for this app to work
-2. `npm i` to load dependencies.
-3. `npm run build` to build the `dist` directory
+1. set up tokens/secrets/environment variables
+   - On GitHub:
+      1. In the project's `settings/secrets/actions` page, set up a new environment (e.g., `deployment`) and set up the secret values for `CVE_API_KEY`, `CVE_API_ORG`, and `CVE_API_USER` 
+      2. [set up a Classic Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) in your GitHub account setting's [Personal Access Tokens](https://github.com/settings/tokens) page with the following top-level items checked:  `admin:org, admin:org_hook, admin:public_key, admin:repo_hook, audit_log, delete:packages, notifications, repo, user, workflow, write:discussion, write:packages`
+      3. enable `read and write permissions` for the repository in [Settings/General/Actions/General/Workflow permissions](https://github.com/hkong/cvelistV5/settings/actions)
+   - On local machine:
+      1. Be sure to create/update a `.env` file in the directory you want to run in.
+         - See `.env-EXAMPLE` for an example of what to include
+         - You will need to replace the `<var>` variables with your own credentials for this app to work
+      2. `npm i` to load dependencies.
 
 ## Running CVE Utils
 
+### Running CVE Utils on a Local Development Machine
+
 1. Follow the steps in the Setup section above.
 2. Run `./cves.sh --help` for help on using the commands.
+
+### Running CVE Utils in a GitHub Action
+
+1. Fork [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5)
+2. Follow the Setup instructions above for running on GitHub
+
+The actions will start running on the next scheduled run.  You can delete/change the schedules and modify the GitHub action `yml` scripts for your specific needs, and assuming you have the correct credentials, the actions should run exactly as they do in [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5).
+
+Note however that because there are dependencies between `CVE Release` and `CVE Midnight Baseline`, there will be errors in `CVE Release` with the message `no matching workflow run found with any artifacts?`.  This is normal since the script is looking for an artifact that has not been build.  Once `CVE Midnight Baseline` has ran, this error should go away.
 
 ## Developing CVE Utils
 
@@ -47,9 +63,8 @@ should do it. However, there are times, when tests in `git.serial-test.ts` fail 
 
 ## Environment Variables and Secrets
 
-There are 3 CVE-related "secret" environment variables: `CVE_API_KEY`, `CVE_API_ORG`, and `CVE_API_USER`. These are defined at 
-   - [CveProject/cvelistV5/Settings](https://github.com/CVEProject/cvelistV5/settings/environments/892781747/edit) when deployed to CVEProject/cvelistV5
-   - in `.env` for local development. Note that some CLI functions may not work if your account does not have the right permissions.
+There are 3 CVE-related "secret" environment variables: `CVE_API_KEY`, `CVE_API_ORG`, and `CVE_API_USER`. These need to be defined as specified in the Setup section above.
+
 
 ## Available Scripts
 
@@ -64,12 +79,13 @@ There are 3 CVE-related "secret" environment variables: `CVE_API_KEY`, `CVE_API_
 
 ## Additional Information
 
-This project was started using
+This project uses (either verbatim or modified from) the following projects:
 
 1. [jsynowiec/node-typescript-boilerplate](https://github.com/jsynowiec/node-typescript-boilerplate) as a starter (8/26/2022).
    - but not using [Volta][volta]
 2. [Quicktype](https://quicktype.io/) to convert CVE schemas to usable Typescript classes. Specifically, all classes in `src/generated/quicktype` are all generated this way:
    - `Cve5`: https://raw.githubusercontent.com/CVEProject/cve-services/dev/schemas/cve/create-full-cve-record-request.json
+3. [recommended tsconfig](https://github.com/tsconfig/bases#centralized-recommendations-for-tsconfig-bases)
 
 ### ES Modules
 
