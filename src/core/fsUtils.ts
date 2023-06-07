@@ -81,20 +81,4 @@ export class FsUtils {
     // console.log(`zip file generated at ${resultFilepath}`);
   }
 
-  // /**
-  //  * Synchronously add/overwrite a file to an existing zip file
-  //  * @param filepath of file to add/update to existing zip file
-  //  * @param zipFilepath filename for resulting zip file
-  //  * @param zipVirtualDir dir name in zip, defaults to `files`
-  //  *                      (for example, if you want to add all the files 
-  //  *                       into a zip folder called abc, 
-  //  *                        you would pass 'abc' here)
-  //  */
-  // static updateZipfile(filepath: string, zipFilepath: string, zipVirtualDir: string = `files`) {
-  //   console.log(`updating ${filepath} to ${zipFilepath}`);
-  //   const zip = new AdmZip(zipFilepath);
-  //   zip.addLocalFile(filepath, zipVirtualDir);
-  //   zip.writeZip(zipFilepath);
-  // }
-
 }

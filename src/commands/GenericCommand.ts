@@ -73,7 +73,6 @@ export abstract class GenericCommand {
         CVE_SERVICES_URL: ${process.env.CVE_SERVICES_URL}`);
       console.log(`${this._name} command options:  `);
       console.log(`${JSON.stringify(options, null, 2)}`);
-      console.log();
     }
   }
 

@@ -30,12 +30,12 @@ describe(`FileSystem`, () => {
     fs.rmSync(testZip);
   });
 
-  // it(`generateZipfile() zips a single text file to default virtual zip dir`, async () => {
-  //   const filespath = [kTestFixtureCve0001];
-  //   FsUtils.generateZipfile(filespath, testZip);
-  //   expect(fs.existsSync(testZip)).toBeTruthy();
-  //   fs.rmSync(testZip);
-  // });
+  it(`generateZipfile() zips a single text file to default virtual zip dir`, async () => {
+    const filespath = [kTestFixtureCve0001];
+    FsUtils.generateZipfile(filespath, testZip);
+    expect(fs.existsSync(testZip)).toBeTruthy();
+    fs.rmSync(testZip);
+  });
 
 
   it(`generateZipfile() zips a single text file to a specified virtual zip dir`, async () => {

@@ -58,16 +58,6 @@ describe(`Delta`, () => {
   });
 
   // @todo needs to set up git history for this repository's pretend_github_repository for this test
-  //  to work
-  // it(`newDeltaFromGitHistory() properly builds a Delta object from git history`, async () => {
-  //   const delta = await Delta.newDeltaFromGitHistory("2023-02-16T00:00:00.000Z", "2023-03-21T23:59:59.999Z", process.env.CVES_TEST_BASE_DIRECTORY);
-  //   // console.log(`delta = ${JSON.stringify(delta, null, 2)}`);
-  //   console.log(`delta:  ${JSON.stringify(delta, null, 2)}`);
-  //   expect(delta.numberOfChanges).toBe(3);
-  //   expect(delta.unknown.length).toBe(3);
-  //   expect(delta.unknown[0].cveId).toBe(`CVE-1970-0001`);
-  // });
-
 
   it(`newDeltaFromGitHistory() properly defaults to now`, async () => {
 
