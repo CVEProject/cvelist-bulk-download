@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+temp/logs
+
+# work directories
+node_modules/
+.history
+
+# Coverage
+coverage
+
+# Transpiled files
+build/
+dist/
+release/
+
+# VS Code
+# .vscode
+# !.vscode/tasks.js
+
+# JetBrains IDEs
+.idea/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Misc
+.DS_Store
+devel/
+test/pretend_github_repository*/log
+*.old
+test/pretend_github_repository*/20*
+*\ copy
+*\ copy.*
+*.old/
+
+Notes.md
+
+# deployment specific
+.env
+.env.*
+
+# CVEs
+preview_cves/
+cves/
