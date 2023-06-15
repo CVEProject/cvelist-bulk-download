@@ -6,40 +6,33 @@ This is a set of utilities for maintaining CVE records on GitHub. It is written 
 2. on developer/user environments with access to CVE APIs
    - note some functions or switches may not be available because of a user's CVE API permissions (see [`.env-EXAMPLE`](.env-EXAMPLE) for setting this up)
 
-## Setup
+## Setup for Developing and Running CVE Utils on a Local or VM Development Machine 
 
-You will need to have NodeJS 16.x to develop and/or run this project. Then
+You will need to have NodeJS 16.x to develop and/or run this project on a local or VM machine. The easiest way to do this is to use [nvm](https://github.com/nvm-sh/nvm).  Then
 
-1. set up tokens/secrets/environment variables
-   - On GitHub:
-      1. In the project's `settings/secrets/actions` page, set up a new environment (e.g., `deployment`) and set up the secret values for `CVE_API_KEY`, `CVE_API_ORG`, and `CVE_API_USER` 
-      2. [set up a Classic Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) in your GitHub account setting's [Personal Access Tokens](https://github.com/settings/tokens) page with the following top-level items checked:  `admin:org, admin:org_hook, admin:public_key, admin:repo_hook, audit_log, delete:packages, notifications, repo, user, workflow, write:discussion, write:packages`
-      3. enable `read and write permissions` for the repository in [Settings/General/Actions/General/Workflow permissions](https://github.com/hkong/cvelistV5/settings/actions)
-   - On local machine:
-      1. Be sure to create/update a `.env` file in the directory you want to run in.
-         - See `.env-EXAMPLE` for an example of what to include
-         - You will need to replace the `<var>` variables with your own credentials for this app to work
-      2. `npm i` to load dependencies.
+1. set up tokens/secrets/environment variables by making a `.env` file in the root directory.
+   - See `.env-EXAMPLE` for an example of what to include
+   - You will need to replace the `<var>` variables with your own credentials for this app to work
+2. `npm i` to load dependencies.
+3. For development, look at `package.json`'s `scripts` for available `npm` scripts
+   - of special interest is the `npm run build` command, which builds this project into a single `index.js` file that contains all the necessary code and libraries to run as a Github action.
+5. Run `./cves.sh --help` for help on using the commands.
 
-## Running CVE Utils
+## Setup for Running CVE Utils as Github Actions
 
-### Running CVE Utils on a Local Development Machine
-
-1. Follow the steps in the Setup section above.
-2. Run `./cves.sh --help` for help on using the commands.
-
-### Running CVE Utils in a GitHub Action
-
-1. Fork [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5)
-2. Follow the Setup instructions above for running on GitHub
+1. Fork [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5).  Everything below assumes you are running on your fork.
+2. Set up tokens/secrets/environment variables
+   1. In the project's `settings/secrets/actions` page, set up a new environment (e.g., `deployment`) and set up the secret values for `CVE_API_KEY`, `CVE_API_ORG`, and `CVE_API_USER` 
+   2. [set up a Classic Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) in your GitHub account setting's [Personal Access Tokens](https://github.com/settings/tokens) page with the following top-level items checked:  `admin:org, admin:org_hook, admin:public_key, admin:repo_hook, audit_log, delete:packages, notifications, repo, user, workflow, write:discussion, write:packages`
+   3. enable `read and write permissions` for the repository in [Settings/General/Actions/General/Workflow permissions](https://github.com/hkong/cvelistV5/settings/actions)
+3. if you are making changes to CVE Utils for Github actions, copy the `./dist` directory built above into the `.github/workflows/` directory.  This is the single `index.js` file that Github actions will call.
+4. Enable Github actions in your fork.
+   - Run a specific Github action manually (assuming you have the Github privileges to do so).
+   - Let the Github schedule run each Github action based on the schedule in each Github action `.yml` configuration.
 
 The actions will start running on the next scheduled run.  You can delete/change the schedules and modify the GitHub action `yml` scripts for your specific needs, and assuming you have the correct credentials, the actions should run exactly as they do in [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5).
 
 Note however that because there are dependencies between `CVE Release` and `CVE Midnight Baseline`, there will be errors in `CVE Release` with the message `no matching workflow run found with any artifacts?`.  This is normal since the script is looking for an artifact that has not been build.  Once `CVE Midnight Baseline` has ran, this error should go away.
-
-## Developing CVE Utils
-
-Follow the steps in the Setup section above.
 
 ### Building the Runtime for CVEProject/cvelistV5
 
