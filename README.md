@@ -16,7 +16,18 @@ You will need to have NodeJS 16.x to develop and/or run this project on a local 
 2. `npm i` to load dependencies.
 3. For development, look at `package.json`'s `scripts` for available `npm` scripts
    - of special interest is the `npm run build` command, which builds this project into a single `index.js` file that contains all the necessary code and libraries to run as a Github action.
-5. Run `./cves.sh --help` for help on using the commands.
+4. Run `./cves.sh --help` for help on using the commands.
+
+Some functions (e.g., `update` and `delta` require a `/cves` directory at the same location as `cves.sh` to work.  To do develop/test these functions, you will need to
+
+5. fork [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5)
+6. clone the fork to your local workstation and `cd` into it
+7. `cp <cvelist-bulk-download-root>/.cves.sh .`
+8. `cp <cvelist-bulk-download-root>/.env .`
+9. whenever you compile the Bulk Download Utility (e.g., step 3 above) you will need to do:
+   - `rm -r ./dist`
+   - `cp <cvelist-bulk-download-root>/dist .`
+10. Run `./cves.sh` in the root directory of this project 
 
 ## Setup for Running CVE Utils as Github Actions
 
@@ -26,15 +37,18 @@ You will need to have NodeJS 16.x to develop and/or run this project on a local 
    2. [set up a Classic Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) in your GitHub account setting's [Personal Access Tokens](https://github.com/settings/tokens) page with the following top-level items checked:  `admin:org, admin:org_hook, admin:public_key, admin:repo_hook, audit_log, delete:packages, notifications, repo, user, workflow, write:discussion, write:packages`
    3. enable `read and write permissions` for the repository in [Settings/General/Actions/General/Workflow permissions](https://github.com/hkong/cvelistV5/settings/actions)
 3. if you are making changes to CVE Utils for Github actions, copy the `./dist` directory built above into the `.github/workflows/` directory.  This is the single `index.js` file that Github actions will call.
-4. Enable Github actions in your fork.
-   - Run a specific Github action manually (assuming you have the Github privileges to do so).
-   - Let the Github schedule run each Github action based on the schedule in each Github action `.yml` configuration.
+4. Enable and manually run (assuming you have the Github privileges to do so) the following Github actions in your fork **in the following order** (the order matters because there are dependencies in the actions):
+   1. CodeQL
+   2. CVE Midnight Baseline
+   3. CVE Yesterday's Delta Release
+   4. CVE Update
+   5. CVE Release
 
-The actions will start running on the next scheduled run.  You can delete/change the schedules and modify the GitHub action `yml` scripts for your specific needs, and assuming you have the correct credentials, the actions should run exactly as they do in [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5).
+The actions are all scheduled, and will start running on the next scheduled run.  You can delete/change the schedules and modify the GitHub action `yml` scripts for your specific needs, and assuming you have the correct credentials, the actions should run exactly as they do in [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5).
 
 Note however that because there are dependencies between `CVE Release` and `CVE Midnight Baseline`, there will be errors in `CVE Release` with the message `no matching workflow run found with any artifacts?`.  This is normal since the script is looking for an artifact that has not been build.  Once `CVE Midnight Baseline` has ran, this error should go away.
 
-### Building the Runtime for CVEProject/cvelistV5
+### Building the Runtime for Github Actions
 
 1. Make sure the code has been reviewed.
 2. Modify the version in `src/main.ts` line 17. It should follow semver conventions.
