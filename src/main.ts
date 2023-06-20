@@ -14,7 +14,7 @@ dotenv.config();
  *  The format follows semver for released software: Major.Minor.Patch, e.g., `1.0.0`
  *  However before release, it only uses the GitHub Project sprint number, e.g., `Sprint-1`
  */
-const version = `1.0.1-2023.06.07`;
+const version = `1.0.1`;
 
 import { MainCommands } from './commands/MainCommands.js';
 const program = new MainCommands(version);
