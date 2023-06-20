@@ -19,16 +19,16 @@ You will need to have NodeJS 16.x to develop and/or run this project on a local 
    - of special interest is the `npm run build` command, which builds this project into a single `index.js` file that contains all the necessary code and libraries to run as a Github action.
 5. Run `./cves.sh --help` for help on using the commands.
 
-Some functions (e.g., `update` and `delta` require a `/cves` directory at the same location as `cves.sh` to work.  To do develop/test these functions, you will need to
+Some functions (e.g., `update` and `delta` require a `/cves` directory at the same location as `cves.sh` to work.  To develop/test these functions, you will need to
 
-5. fork [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5)
-6. clone the fork to your local workstation and `cd` into it
-7. `cp <cvelist-bulk-download-root>/.cves.sh .`
-8. `cp <cvelist-bulk-download-root>/.env .`
-9. whenever you compile the Bulk Download Utility (e.g., step 3 above) you will need to do:
+1. fork [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5)
+2. clone the fork to your local workstation and `cd` into it
+3. `cp <cvelist-bulk-download-root>/.cves.sh .`
+4. `cp <cvelist-bulk-download-root>/.env .`
+5. whenever you compile the Bulk Download Utility (e.g., step 4 above) you will need to do:
    - `rm -r ./dist`
    - `cp <cvelist-bulk-download-root>/dist .`
-10. Run `./cves.sh` in the root directory of this project 
+6. Run `./cves.sh` in the root directory of this project 
 
 ## Setup for Running CVE Utils as Github Actions
 
@@ -36,7 +36,7 @@ Some functions (e.g., `update` and `delta` require a `/cves` directory at the sa
 2. Set up tokens/secrets/environment variables
    1. In the project's `settings/secrets/actions` page, set up a new environment (e.g., `deployment`) and set up the secret values for `CVE_API_KEY`, `CVE_API_ORG`, and `CVE_API_USER` 
    2. [set up a Classic Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) in your GitHub account setting's [Personal Access Tokens](https://github.com/settings/tokens) page with the following top-level items checked:  `admin:org, admin:org_hook, admin:public_key, admin:repo_hook, audit_log, delete:packages, notifications, repo, user, workflow, write:discussion, write:packages`
-   3. enable `read and write permissions` for the repository in [Settings/General/Actions/General/Workflow permissions](https://github.com/hkong/cvelistV5/settings/actions)
+   3. Use the repository created in step 1. above. Enable `read and write permissions` for that repository under `Settings > General > Actions> General > Workflow` permissions
 3. if you are making changes to CVE Utils for Github actions, copy the `./dist` directory built above into the `.github/workflows/` directory.  This is the single `index.js` file that Github actions will call.
 4. Enable and manually run (assuming you have the Github privileges to do so) the following Github actions in your fork **in the following order** (the order matters because there are dependencies in the actions):
    1. CodeQL
