@@ -58,6 +58,7 @@ describe(`Delta`, () => {
   });
 
   // @todo needs to set up git history for this repository's pretend_github_repository for this test
+  //  to work
 
   it(`newDeltaFromGitHistory() properly defaults to now`, async () => {
 

@@ -31,7 +31,6 @@ describe(`FileSystem`, () => {
   });
 
 
-
   it(`generateZipfile() zips a single text file to a specified virtual zip dir`, async () => {
     const filespath = [kTestFixtureCve0001];
     FsUtils.generateZipfile(filespath, testZip, 'deltaCves');
