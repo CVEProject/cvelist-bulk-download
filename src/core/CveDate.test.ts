@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv';
+import { differenceInCalendarDays, parse } from 'date-fns';
 
 import { CveDate } from './CveDate.js';
+
 
 dotenv.config();
 
@@ -46,6 +48,19 @@ describe(`CveDate`, () => {
     const todayIso = CveDate.toISOString();
     expect(midnightISO.substring(0, midnightISO.indexOf('T'))).toMatch(todayIso.substring(0, todayIso.indexOf('T')));
     expect(midnightISO).toContain('00:00:00.000Z');
+  });
+
+  it(`getMidnightYesterday() should output midnight of yesterday`, async () => {
+    const midnight = CveDate.getMidnight()
+    const midnightYesterday = CveDate.getMidnightYesterday()
+    expect(differenceInCalendarDays(midnight,midnightYesterday)).toBe(1)
+  });
+
+  it(`getYesterday() should output yesterday's date as a string`, async () => {
+    const now = new Date();
+    const yesterday = CveDate.getYesterday();
+    const yesterdate = parse(yesterday, 'yyyy-MM-dd', new Date());
+    expect(differenceInCalendarDays(now, yesterdate)).toBe(1);
   });
 
 });

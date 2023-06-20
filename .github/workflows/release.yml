@@ -1,0 +1,78 @@
+# Github Action for hourly releases
+
+name: CVE Release
+
+on:
+  # at 0 min after each hour
+  # note this does not include any updates at 0 min after each hour
+  #   since that job will be running in parallel to this.  Those updates will be picked up the following hour.
+  # note also that github does not guarantee specified time, and it can start much later than specified
+  schedule:
+    - cron: '0 * * * *'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: false
+        default: 'debug'
+jobs:
+  generate-name:
+    environment: deployment
+    runs-on: ubuntu-latest
+    outputs:
+      v_current_run_timestamp: ${{ steps.get-timestamp.outputs.out }}
+    steps:
+      - name: generate-name
+        id: get-timestamp
+        run: echo "out=$(date '+%Y-%m-%d_%H00Z')" >> $GITHUB_OUTPUT
+  create_release:
+    needs: [generate-name]
+    environment: deployment
+    runs-on: ubuntu-latest
+    env:
+      CVE_SERVICES_URL: https://cveawg.mitre.org
+      CVES_BASE_DIRECTORY: cves
+      CVES_RECENT_ACTIVITIES_FILENAME: recent_activities.json
+      CVES_DEFAULT_UPDATE_LOOKBACK_IN_MINS: 180
+      CVE_API_ORG: ${{secrets.CVE_API_ORG}}
+      CVE_API_USER: ${{secrets.CVE_API_USER}}
+      CVE_API_KEY: ${{secrets.CVE_API_KEY}}
+    steps:
+      # - name: create release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: cve_${{ needs.generate-name.outputs.v_current_run_timestamp }}
+      #     release_name: CVE Release ${{ needs.generate-name.outputs.v_current_run_timestamp }}
+      #     draft: false
+      #     prerelease: false
+      #     # make_latest: true
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Download artifact from baseline workflow
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: baseline.yml
+          workflow_conclusion: success
+          skip_unpack: true
+          if_no_artifact_found: fail
+      - name: build delta files
+        run: |
+          ls ./.github/workflows/dist
+          node ./.github/workflows/dist/index.js delta
+      - name: create release with source code as artifacts
+        uses: softprops/action-gh-release@v1
+        with:
+          name: CVE ${{ needs.generate-name.outputs.v_current_run_timestamp }}
+          # body: Descriptions for CVE ${{ needs.generate-name.outputs.v_current_run_timestamp }} goes here
+          body_path: ./release_notes.md
+          tag_name: cve_${{ needs.generate-name.outputs.v_current_run_timestamp }}
+          files: |
+            release_notes.md
+            *.zip

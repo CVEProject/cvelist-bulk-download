@@ -60,14 +60,16 @@ export abstract class GenericCommand {
   */
   prerun(options): void {
     const now = new CveDate();
-    if (options.display !== false) {
+    if (options.preamble !== false && options.terse !== true) {
       console.log(`CVE Utils version ${GenericCommand.getUtilityVersion()}`);
       console.log(`  starting '${this._name}' command...`);
     }
-    console.log(`  local  : ${now.asDateString((options.localTimezone) ? options.localTimezone : "America/New_York")}`);
-    console.log(`  ISO    : ${now.asIsoDateString()}`);
+    if (options.terse !== true) {
+      console.log(`  local  : ${now.asDateString((options.localTimezone) ? options.localTimezone : "America/New_York")}`);
+      console.log(`  ISO    : ${now.asIsoDateString()}`);
+    }
 
-    if (options.display !== false) {
+    if (options.preamble !== false && options.terse !== true) {
       console.log(`environment variables:
         CVES_BASE_DIRECTORY: ${process.env.CVES_BASE_DIRECTORY}
         CVE_SERVICES_URL: ${process.env.CVE_SERVICES_URL}`);

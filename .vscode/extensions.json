@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+      "github.vscode-github-actions",
+      "esbenp.prettier-vscode",
+      "ryu1kn.partial-diff"
+    ]
+}
