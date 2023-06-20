@@ -10,13 +10,14 @@ This is a set of utilities for maintaining CVE records on GitHub. It is written 
 
 You will need to have NodeJS 16.x to develop and/or run this project on a local or VM machine. The easiest way to do this is to use [nvm](https://github.com/nvm-sh/nvm).  Then
 
-1. set up tokens/secrets/environment variables by making a `.env` file in the root directory.
+1. clone this repository
+2. set up tokens/secrets/environment variables by making a `.env` file in the root directory.
    - See `.env-EXAMPLE` for an example of what to include
    - You will need to replace the `<var>` variables with your own credentials for this app to work
-2. `npm i` to load dependencies.
-3. For development, look at `package.json`'s `scripts` for available `npm` scripts
+3. `npm i` to load dependencies.
+4. For development, look at `package.json`'s `scripts` for available `npm` scripts
    - of special interest is the `npm run build` command, which builds this project into a single `index.js` file that contains all the necessary code and libraries to run as a Github action.
-4. Run `./cves.sh --help` for help on using the commands.
+5. Run `./cves.sh --help` for help on using the commands.
 
 Some functions (e.g., `update` and `delta` require a `/cves` directory at the same location as `cves.sh` to work.  To do develop/test these functions, you will need to
 
