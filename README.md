@@ -94,7 +94,3 @@ This project uses (either verbatim or modified from) the following projects:
 2. [Quicktype](https://quicktype.io/) to convert CVE schemas to usable Typescript classes. Specifically, all classes in `src/generated/quicktype` are all generated this way:
    - `Cve5`: https://raw.githubusercontent.com/CVEProject/cve-services/dev/schemas/cve/create-full-cve-record-request.json
 3. [recommended tsconfig](https://github.com/tsconfig/bases#centralized-recommendations-for-tsconfig-bases)
-
-### ES Modules
-
-This template uses native [ESM][esm]. Make sure to read [this][nodejs-esm], and [this][ts47-esm] first.
