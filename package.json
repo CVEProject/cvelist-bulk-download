@@ -1,14 +1,14 @@
 {
   "name": "cve-utils",
-  "version": "0.0.2",
-  "description": "A set of utilities for working with CVEs in JS/TS",
+  "version": "1.0.1+update_2023-08-01",
+  "description": "CLI utility for working with CVEs",
   "type": "module",
   "engines": {
-    "node": ">= 16.20 <17"
+    "node": ">= 18.16 <19"
   },
   "devDependencies": {
     "@types/jest": "~27.5",
-    "@types/node": "~16",
+    "@types/node": "^18.16.0",
     "@typescript-eslint/eslint-plugin": "~5.26",
     "@typescript-eslint/parser": "~5.26",
     "eslint": "~8.16",
