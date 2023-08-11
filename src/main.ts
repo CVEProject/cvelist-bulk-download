@@ -14,7 +14,7 @@ dotenv.config();
  *  The format follows semver for released software: Major.Minor.Patch, e.g., `1.0.0`
  *  However before release, it only uses the version number that it branched from, and appending it with `+feature_YYYY-MM-DD`, e.g., `1.0.1+twitter_2023-08-02`.
  */
-const version = `1.0.1+update_2023-08-01`;
+const version = `1.0.2_2023-08-01`;
 
 import { MainCommands } from './commands/MainCommands.js';
 const program = new MainCommands(version);
