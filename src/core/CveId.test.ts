@@ -36,17 +36,24 @@ describe(`CveId`, () => {
   });
 
 
-  it(`correctly returns the CVE's repository path`, async () => {
+  it(`getCvePath() correctly returns the CVE's repository path`, async () => {
     const cveId = new CveId(kCveId);
     expect(cveId.id).toEqual(kCveId);
     expect(cveId.getCvePath()).toEqual(`1999/0xxx/${kCveId}`);
   });
 
 
-  it(`correctly returns the CVE's full path`, async () => {
+  it(`getFullCvePath() correctly returns the CVE's full path`, async () => {
     const cveId = new CveId(kCveId);
     expect(cveId.id).toEqual(kCveId);
     expect(cveId.getFullCvePath()).toEqual(`${process.cwd()}/${process.env.CVES_BASE_DIRECTORY}/1999/0xxx/${kCveId}`);
+  });
+
+
+  it(`getRawGithubUrl() correctly returns the CVE's URL on Github`, async () => {
+    const cveId = new CveId(kCveId);
+    expect(cveId.id).toEqual(kCveId);
+    expect(cveId.getRawGithubUrl()).toEqual(`https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/1999/0xxx/CVE-1999-0001.json`);
   });
 
 

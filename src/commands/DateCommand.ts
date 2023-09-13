@@ -5,8 +5,8 @@ import { CveDate } from '../core/CveDate.js';
 
 /** Command to print out current date in various formats */
 export class DateCommand extends GenericCommand {
-
-  constructor(name: string, program: Command) {
+  constructor(program: Command) {
+    const name = 'date';
     super(name, program);
     this._program
       .command(name)
@@ -29,7 +29,6 @@ export class DateCommand extends GenericCommand {
   }
 
   async run(options) {
-
     super.prerun({ preamble: false, ...options });
     if (options.midnight) {
       const tag = options.terse ? '' : `  midnight:  `;
@@ -54,5 +53,4 @@ export class DateCommand extends GenericCommand {
     }
     super.postrun(options);
   }
-
 }

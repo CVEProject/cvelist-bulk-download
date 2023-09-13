@@ -7,7 +7,7 @@ import {
   StatusResult,
 } from 'simple-git';
 
-import { CveCore, CveId } from './CveCore.js';
+import { CveCore, CveCorePlus, CveId } from './CveCorePlus.js';
 import { Delta, DeltaQueue } from './Delta.js';
 
 export { StatusResult, Response };
@@ -25,8 +25,8 @@ export class Git {
    */
   constructor(init: Partial<Git> = undefined) {
     // this.fullOriginUrl = init?.fullOriginUrl ? init.fullOriginUrl : `https://${process.env.GH_TOKEN}@github.com/${process.env.GH_OWNER}/${process.env.GH_REPO}.git`;
-    this.localDir = init?.localDir ? init.localDir : `${process.cwd()}`;
-    console.log(`git working directory set to ${this.localDir}`);
+    this.localDir = init?.localDir ? init.localDir : `${process.cwd()}/${process.env.CVES_BASE_DIRECTORY}`;
+    // console.log(`git working directory set to ${this.localDir}`);
     this.git = simpleGit(this.localDir, { binary: 'git' });
     this.git.cwd(this.localDir);
   }
@@ -56,7 +56,7 @@ export class Git {
    * 
   */
   async add(fullPathFiles: string | string[]): Promise<Response<string>> {
-    console.log(`adding ${JSON.stringify(fullPathFiles)}`);
+    // console.log(`adding ${JSON.stringify(fullPathFiles)}`);
     const retval = this.git.add(fullPathFiles, Git.genericCallback);
     return retval;
   }
@@ -126,7 +126,7 @@ export class Git {
         `--name-only`,
         `${commits[0]}..${commits[commits.length - 1]}`,
         `--relative=${this.localDir}`);
-      console.log(`retval from logChangedFilenamesInTimeWindow:  ${files}`);
+      // console.log(`retval from logChangedFilenamesInTimeWindow:  ${files}`);
       let retval: string[] = files.split('\n');
       if (retval[retval.length - 1] === "") {
         // remove last empty \n
@@ -145,7 +145,7 @@ export class Git {
   async logDeltasInTimeWindow(start: string, stop: string): Promise<Delta> {
     // console.log(`logChangedFilenamesInTimeWindow(${start},${stop})`);
     const commits = await this.logCommitHashInWindow(start, stop);
-    console.log(`retval from logCommitHashInWindow:  ${JSON.stringify(commits)}`);
+    // console.log(`retval from logCommitHashInWindow:  ${JSON.stringify(commits)}`);
     const delta = new Delta();
 
     if (commits.length > 0) {
@@ -161,20 +161,20 @@ export class Git {
       lines.forEach(line => {
         const [a, b, c, d, subline] = line.split(' ');
         const action = subline[0];
-        const path = subline.substring(1).trim();
+        const path = `${this.localDir}/${subline.substring(1).trim()}`;
         console.log(`line=${line}`);
         console.log(`action=${action}  path=${path}`);
         const cveId = CveCore.getCveIdfromRepositoryFilePath(path);
         if (CveId.isValidCveId(cveId)) {
           switch (action) {
             case 'A':
-              delta.add(CveCore.fromRepositoryFilePath(path), DeltaQueue.kNew);
+              delta.add(CveCorePlus.fromJsonFile(path), DeltaQueue.kNew);
               break;
             case 'M':
-              delta.add(CveCore.fromRepositoryFilePath(path), DeltaQueue.kUpdated);
+              delta.add(CveCorePlus.fromJsonFile(path), DeltaQueue.kUpdated);
               break;
             default:
-              delta.add(CveCore.fromRepositoryFilePath(path), DeltaQueue.kUnknown);
+              delta.add(CveCorePlus.fromJsonFile(path), DeltaQueue.kUnknown);
               break;
           }
         }

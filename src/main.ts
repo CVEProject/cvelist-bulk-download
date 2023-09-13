@@ -11,12 +11,14 @@ dotenv.config();
  * 
  *  It is an extra step to remember to do when deploying, but is a worthwhile step to keep 2 dependent repositories synchronized.
  * 
- *  The format follows semver for released software: Major.Minor.Patch, e.g., `1.0.0`
- *  However before release, it only uses the version number that it branched from, and appending it with `+feature_YYYY-MM-DD`, e.g., `1.0.1+twitter_2023-08-02`.
+ *  The format follows semver for released software: Major.Minor.Patch, e.g., `1.0.0` with an optional '-mitre-' for "MITRE-only" releases
+ *  In addition, before release, it uses the version number that it branched from, and appends it with `+feature_YYYY-MM-DD`, e.g., `1.0.1+twitter_2023-08-02`.
  */
-const version = `1.0.2_2023-08-01`;
+const version = `1.0.2+delta_2023-09-12`;
 
 import { MainCommands } from './commands/MainCommands.js';
 const program = new MainCommands(version);
 
-await program.run();
+(async () => {
+  await program.run();
+})();
