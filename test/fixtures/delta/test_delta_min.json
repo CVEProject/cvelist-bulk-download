@@ -1,0 +1,16 @@
+{
+  "fetchTime": "2023-07-24T17:14:04.394Z",
+  "durationInMsecs": 0,
+  "numberOfChanges": 2,
+  "new": [
+    {
+      "cveId": "CVE-2023-3320"
+    }
+  ],
+  "updated": [
+    {
+      "cveId": "CVE-2023-3321"
+    }
+  ],
+  "unknown": []
+}
