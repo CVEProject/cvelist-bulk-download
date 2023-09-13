@@ -14,6 +14,7 @@ coverage
 # Transpiled files
 build/
 dist/
+dist.*/
 release/
 
 # VS Code
@@ -32,9 +33,9 @@ release/
 # Misc
 .DS_Store
 devel/
-test/pretend_github_repository*/log
+# test/pretend_github_repository*/log
 *.old
-test/pretend_github_repository*/20*
+# test/pretend_github_repository*/20*
 *\ copy
 *\ copy.*
 *.old/
@@ -47,4 +48,6 @@ Notes.md
 
 # CVEs
 preview_cves/
-cves/
+cves/2*
+deltas/
+cves/deltaLog.json
