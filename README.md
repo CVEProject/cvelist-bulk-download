@@ -8,7 +8,7 @@ This is a set of utilities for maintaining CVE records on GitHub. It is written 
 
 ## Setup for Developing and Running CVE Utils on a Local or VM Development Machine 
 
-You will need to have NodeJS 16.x to develop and/or run this project on a local or VM machine. The easiest way to do this is to use [nvm](https://github.com/nvm-sh/nvm).  Then
+You will need to have NodeJS 18.16+ to develop and/or run this project on a local or VM machine. The easiest way to do this is to use [nvm](https://github.com/nvm-sh/nvm).  Then
 
 1. clone this repository
 2. set up tokens/secrets/environment variables by making a `.env` file in the root directory.

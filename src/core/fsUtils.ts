@@ -2,6 +2,8 @@
 
 import fs from 'fs';
 import path from 'path';
+
+import { unset } from 'lodash';
 import AdmZip from 'adm-zip';
 
 export class FsUtils {
@@ -47,6 +49,48 @@ export class FsUtils {
       retval.push(file);
     });
     return retval;
+  }
+
+  static deleteProperties(obj: unknown, propPath: string): unknown {
+    console.log(`deleteProperties:  ${propPath}`);
+    const propPathComponents = propPath.split('.');
+    if (propPathComponents.length === 1) {
+      delete obj[propPathComponents[0]];
+    }
+    else {
+      const cur = propPathComponents.shift();
+      FsUtils.deleteProperties(obj[cur], propPathComponents.join('.'));
+    }
+    return obj;
+  }
+
+  /** returns true iff the content of file at path 1 and the file at path 2 are exactly the same
+   *  @param path1 the relative or fullpath to a file
+   *  @param path2 the relative or fullpath to another file
+   *  @param ignoreJsonProps optional array of json paths to ignore, e.g., ["cveMetadata.datePublished", "cveMetadata.dateUpdated", "cveMetadata.dateReserved"]
+   */
+  static isSameContent(path1: string, path2: string, ignoreJsonProps?: string[]): boolean {
+    if (!FsUtils.exists(path1) || !FsUtils.exists(path2)) {
+      return false;
+    }
+    const buf1 = fs.readFileSync(path1);
+    const buf2 = fs.readFileSync(path2);
+    if (!ignoreJsonProps) {
+      return buf1.equals(buf2);
+    }
+    else {
+      let json1 = JSON.parse(buf1.toString());
+      let json2 = JSON.parse(buf2.toString());
+      ignoreJsonProps.forEach(item => {
+        // json1 = FsUtils.deleteProperties(json1, item);
+        // json2 = FsUtils.deleteProperties(json2, item);
+        unset(json1, item);
+        unset(json2, item);
+      });
+      console.log(`json1 : ${JSON.stringify(json1, null, 2)}`);
+      console.log(`json2 : ${JSON.stringify(json2, null, 2)}`);
+      return JSON.stringify(json1) == JSON.stringify(json2);
+    }
   }
 
   /**

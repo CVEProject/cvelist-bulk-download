@@ -15,9 +15,9 @@ import fs from 'fs';
 import path from 'path';
 import process from 'process';
 import { simpleGit, SimpleGit, StatusResult } from 'simple-git';
-import { cloneDeep, findIndex } from 'lodash';
+import { cloneDeep } from 'lodash';
 
-import { CveId, CveCore } from './CveCore.js';
+import { CveId, CveCore, CveCorePlus } from './CveCorePlus.js';
 import { Git } from './git.js';
 import { FsUtils } from './fsUtils.js';
 
@@ -31,31 +31,102 @@ export enum DeltaQueue {
   kUnknown
 }
 
+/**
+ * Output JSON format for delta.json and deltaLog.json based on feedback
+ * from the AWG on 8/22/2023 to keep the output simple
+ * 
+ * So internally, we are storing the full CveCorePlus, but externally,
+ * and specifically when writing out to JSON, we are using this shortened format
+ 
+ * see https://github.com/CVEProject/cvelistV5/issues/23 for some additional discussions
+ * before and after the AWG meeting on 8/22
+ */
+export class DeltaOutpuItem {
 
-export class Delta /*implements DeltaProps*/ {
+  static _cveOrgPrefix = `https://www.cve.org/CVERecord?id=`;
+  static _githubRawJsonPrefix = `https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/`
+
+  cveId: string;          // string version of the CVE ID
+  cveOrgLink?: string;    // url to cve.org record
+  githubLink?: string;    // url to Github raw json
+  dateUpdated?: string;   // ISO string
+
+  static fromCveCorePlus(cvep: CveCorePlus): DeltaOutpuItem {
+    let deltaItem = new DeltaOutpuItem();
+    const cveid = cvep.cveId.toString();
+    deltaItem.cveId = cveid;
+    deltaItem.cveOrgLink = `${DeltaOutpuItem._cveOrgPrefix}${cveid}`;
+    deltaItem.githubLink = `${DeltaOutpuItem._githubRawJsonPrefix}${CveId.getCveDir(cveid)}/${cveid}.json`;
+    deltaItem.dateUpdated = cvep.dateUpdated;
+    return deltaItem;
+  }
+
+  static replacer(key: string, value: any) {
+    let items = [];
+    if (key === 'new' || key === 'updated' || key === 'unknown') {
+      value.forEach((item: CveCorePlus) => {
+        // Note, it is important to keep this loop as simple as possible,
+        //  don't rely on item being an actual CveCorePlus object since
+        //  it may not be depending on what built it
+        // console.log(`replacer item=${JSON.stringify(item, null, 2)}`);
+        const cveid = item.cveId.toString();
+        if (cveid) {
+          items.push({
+            cveId: cveid,
+            cveOrgLink: `${DeltaOutpuItem._cveOrgPrefix}${cveid}`,
+            githubLink: `${DeltaOutpuItem._githubRawJsonPrefix}${CveId.getCveDir(cveid)}/${cveid}.json`,
+            dateUpdated: item.dateUpdated
+          });
+        }
+      });
+      return items;
+    }
+    else {
+      return value;
+    }
+  }
+
+  toJSON() {
+    return {
+      cveId: this.cveId,
+      cveOrgLink: this.cveOrgLink,
+      githubLink: this.githubLink,
+      dateUpdated: this.dateUpdated
+    };
+  }
+
+
+}
+
+
+export class Delta {
+
+  fetchTime?: string;
+  durationInMsecs?: number;   // if not set, it means that it was not calculated
   numberOfChanges: number = 0;
-  // published: CveCore[] = [];
-  new: CveCore[] = [];
-  updated: CveCore[] = [];
-  unknown: CveCore[] = [];
+  new: CveCorePlus[] = [];
+  updated: CveCorePlus[] = [];
+  unknown?: CveCorePlus[] = []; // for any CVE that is not new or updated, which should never be the case except for errors
+
+  // ----- constructor and factory functions ----- ----- 
 
   /** constructor
-   *  @param prevDelta a previous delta to intialize this object, essentially appending new
+   *  @param prevDelta a previous delta to intialize this object, essentially prepending new
    *                   deltas to the privous ones (default is none)
    */
   constructor(prevDelta: Partial<Delta> = null) {
 
     // update with previous delta, if any
     if (prevDelta) {
+      this.fetchTime = prevDelta?.fetchTime;
+      this.durationInMsecs = prevDelta?.durationInMsecs
       this.numberOfChanges = prevDelta?.numberOfChanges ?? 0;
       this.new = prevDelta?.new ? cloneDeep(prevDelta.new) : [];
       // this.published = prevDelta?.published ? cloneDeep(prevDelta.published) : [];
       this.updated = prevDelta?.updated ? cloneDeep(prevDelta.updated) : [];
+      this.unknown = prevDelta?.unknown ? cloneDeep(prevDelta.unknown) : [];
     }
   }
-
-
-  // ----- factory functions ----- ----- 
 
   /**
    * Factory that generates a new Delta from git log based on a time window
@@ -73,6 +144,14 @@ export class Delta /*implements DeltaProps*/ {
     //   delta.add(new CveCore(tuple[0]), DeltaQueue.kUnknown);
     // });
     return delta;
+  }
+
+  /**
+   * updates data in new and updated lists using CVE ID
+   */
+  hydrate() {
+    this.new.forEach(item => item.updateFromLocalRepository());
+    this.updated.forEach(item => item.updateFromLocalRepository());
   }
 
 
@@ -115,13 +194,13 @@ export class Delta /*implements DeltaProps*/ {
     notAddedList.forEach(item => {
       const cveId = Delta.getCveIdMetaData(item)[0];
       if (cveId) {
-        delta.add(new CveCore(cveId), DeltaQueue.kNew);
+        delta.add(new CveCorePlus(cveId), DeltaQueue.kNew);
       }
     });
     modifiedList.forEach(item => {
       const cveId = Delta.getCveIdMetaData(item)[0];
       if (cveId) {
-        delta.add(new CveCore(cveId), DeltaQueue.kUpdated);
+        delta.add(new CveCorePlus(cveId), DeltaQueue.kUpdated);
       }
     });
 
@@ -140,8 +219,8 @@ export class Delta /*implements DeltaProps*/ {
    *    [0] is the new queue (with the CVE either added or replace older)
    *    [1] either 0 if CVE is replaced, or 1 if new, intended to be += to this.numberOfChanges (deprecated)
    */
-  private _addOrReplace(cve: CveCore, origQueue: CveCore[]): [CveCore[], 0 | 1] {
-    const i = findIndex(origQueue, item => item.cveId.id == cve.cveId.id);
+  private _addOrReplace(cve: CveCorePlus, origQueue: CveCorePlus[]): [CveCorePlus[], 0 | 1] {
+    const i = origQueue.findIndex(item => item.cveId?.toString() == cve.cveId?.toString())
     if (i < 0) {
       return [[...origQueue, cve], 1];
     }
@@ -152,6 +231,8 @@ export class Delta /*implements DeltaProps*/ {
       return [newQueue, 0];
     }
   }
+
+  // ----- member functions ----- -----
 
   /** calculates the numberOfChanges property
    * @returns the total number of deltas in all the queues
@@ -167,8 +248,8 @@ export class Delta /*implements DeltaProps*/ {
    *  @param cve a CveCore object to be added
    *  @param queue the DeltaQueue enum specifying which queue to add to
    */
-  add(cve: CveCore, queue: DeltaQueue) {
-    let tuple: [CveCore[], 0 | 1];
+  add(cve: CveCorePlus, queue: DeltaQueue) {
+    let tuple: [CveCorePlus[], 0 | 1];
     switch (queue) {
       case DeltaQueue.kNew:
         tuple = this._addOrReplace(cve, this.new);
@@ -217,9 +298,7 @@ export class Delta /*implements DeltaProps*/ {
     return retstr;
   }
 
-
-  // ----- ----- Output to files
-
+  // ----- I/O ----- -----
 
   /** writes the delta to a JSON file
    *  @param relFilepath relative path from current directory
@@ -229,7 +308,14 @@ export class Delta /*implements DeltaProps*/ {
     // console.log(`relFilepath=${relFilepath}`);
     const dirname = path.dirname(relFilepath);
     fs.mkdirSync(dirname, { recursive: true });
-    fs.writeFileSync(`${relFilepath}`, JSON.stringify(this, null, 2));
+    if (!this.fetchTime) {
+      this.fetchTime = new Date().toISOString();
+    }
+    const outputJson =
+      fs.writeFileSync(`${relFilepath}`, JSON.stringify(
+        this,
+        DeltaOutpuItem.replacer,
+        2));
     console.log(`delta file written to ${relFilepath}`);
   }
 

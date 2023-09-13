@@ -15,9 +15,9 @@ export class MainCommands {
     this._program = new Command()
       .version(GenericCommand.setUtilityVersion(version), '-v, --version', 'output the version')
       .name(`cves`)
-      .description(`CLI utility for working with CVEs on GitHub`);
+      .description(`CLI utility for working with CVEs`);
 
-    const dateCommand = new DateCommand('date', this._program);
+    const dateCommand = new DateCommand(this._program);
     const deltaCommand = new DeltaCommand(this._program);
     const updateCommand = new UpdateCommand(this._program);
   }
