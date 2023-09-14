@@ -131,7 +131,7 @@ describe(`Git`, () => {
         // console.log(`retval=${JSON.stringify(retval, null, 2)}`);
         expect(retval[0]).toEqual(`fa298ddd39500963b357823b802dba6952bc71d0`);
         expect(retval[retval.length - 1]).toEqual(`207b9f2b82908afbd8d9d2270969f6781f9d39e4`);
-        expect(retval.length).toBe(25);
+        expect(retval.length).toBe(26);
     });
 
 

@@ -107,7 +107,7 @@ describe(`DeltaLog`, () => {
     log.prepend(
       new Delta()
     );
-    expect(log.writeFile()).toBeFalsy();
+    expect(log.writeFile(kTestPath)).toBeFalsy();
   });
 
 
@@ -118,7 +118,7 @@ describe(`DeltaLog`, () => {
     log.prepend(
       delta
     );
-    expect(log.writeFile()).toBeTruthy();
+    expect(log.writeFile(kTestPath)).toBeTruthy();
   });
 
 });
