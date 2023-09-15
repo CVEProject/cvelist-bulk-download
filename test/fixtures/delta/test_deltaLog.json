@@ -1,7 +1,6 @@
 [
   {
     "fetchTime": "2023-07-24T17:34:04.394Z",
-    "durationInMsecs": 3044,
     "numberOfChanges": 2,
     "new": [],
     "updated": [
@@ -22,7 +21,6 @@
   },
   {
     "fetchTime": "2023-07-24T17:14:04.394Z",
-    "durationInMsecs": 3244,
     "numberOfChanges": 2,
     "new": [
       {
@@ -44,7 +42,6 @@
   },
   {
     "fetchTime": "2023-07-24T17:02:00.394Z",
-    "durationInMsecs": 2244,
     "numberOfChanges": 1,
     "new": [
       {
