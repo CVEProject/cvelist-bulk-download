@@ -45,7 +45,7 @@
     "dotenv": "^16.0.1",
     "lodash": "^4.17.21",
     "octokit": "^2.0.14",
-    "simple-git": "^3.17.0",
+    "simple-git": "^3.19.1",
     "tslib": "~2.4"
   },
   "volta": {
