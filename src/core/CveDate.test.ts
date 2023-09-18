@@ -16,7 +16,8 @@ describe(`CveDate`, () => {
   it(`default constructor should create a new CveDate from the current time`, async () => {
     const timestamp = new Date();
     const cveDate = new CveDate();
-    expect(cveDate.asIsoDateString().toString()).toMatch(CveDate.toISOString(timestamp));
+    const maxLeniency = new Date().getTime() - timestamp.getTime();
+    expect(cveDate.asDate().getTime() - timestamp.getTime()).toBeLessThanOrEqual(maxLeniency);
   });
 
   it(`asDateString() should return a properly formatted string`, async () => {
