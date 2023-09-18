@@ -102,7 +102,7 @@ export class DeltaOutpuItem {
 export class Delta {
 
   fetchTime?: string;
-  durationInMsecs?: number;   // if not set, it means that it was not calculated
+  // durationInMsecs?: number;   // if not set, it means that it was not calculated
   numberOfChanges: number = 0;
   new: CveCorePlus[] = [];
   updated: CveCorePlus[] = [];
@@ -119,7 +119,7 @@ export class Delta {
     // update with previous delta, if any
     if (prevDelta) {
       this.fetchTime = prevDelta?.fetchTime;
-      this.durationInMsecs = prevDelta?.durationInMsecs
+      // this.durationInMsecs = prevDelta?.durationInMsecs
       this.numberOfChanges = prevDelta?.numberOfChanges ?? 0;
       this.new = prevDelta?.new ? cloneDeep(prevDelta.new) : [];
       // this.published = prevDelta?.published ? cloneDeep(prevDelta.published) : [];

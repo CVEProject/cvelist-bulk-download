@@ -94,7 +94,7 @@ export class UpdateCommand extends GenericCommand {
         let currentDelta = new Delta(activity.delta);
         currentDelta.hydrate()
         currentDelta.fetchTime = activity.startTime;
-        currentDelta.durationInMsecs = parseInt(activity.duration.split(' ')[0]);
+        // currentDelta.durationInMsecs = parseInt(activity.duration.split(' ')[0]);
         currentDelta.writeFile();
 
         // copy CVEs to delta directory

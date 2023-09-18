@@ -90,7 +90,7 @@ describe(`Delta`, () => {
     const delta = new Delta(prevDelta);
     // console.log(`delta = ${JSON.stringify(delta, null, 2)}`);
     expect(delta.fetchTime).toBeUndefined();
-    expect(delta.durationInMsecs).toBeUndefined();
+    // expect(delta.durationInMsecs).toBeUndefined();
     expect(delta.numberOfChanges).toBe(delta.new.length + delta.updated.length);
     expect(delta.new.length).toBe(1);
     expect(delta.new[0].cveId).toEqual(kTestCve9999.cveId);
