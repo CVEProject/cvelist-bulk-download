@@ -54,7 +54,7 @@ export class CveRecord implements CveRecordV5 {
    *  @returns a CveRecord
    */
   static fromCveId(cve_id: string | CveId, cves_directory?:string): CveRecord | undefined {
-    console.log(`cve_id=${cve_id}`)
+     console.log(`cve_id=${cve_id}`)
     const cveId = new CveId(cve_id)
     let path
     if ( !cves_directory ) {
@@ -63,7 +63,7 @@ export class CveRecord implements CveRecordV5 {
     else {
       path = `${cves_directory}/${cveId.getCvePath()}.json`
     }
-    console.log(`path=${path}`)
+     console.log(`path=${path}`)
     return CveRecord.fromJsonFile(path)
   }
 
@@ -93,11 +93,11 @@ export class CveRecord implements CveRecordV5 {
   getDescription(lang: string = 'en'): string | undefined {
     const descriptions = this.containers?.cna?.descriptions;
     if (descriptions && descriptions.length > 0) {
-      const en_descriptions = descriptions.filter((item) =>
+      const lang_descriptions = descriptions.filter((item) =>
         item.lang.toLowerCase().startsWith(lang.toLowerCase()),
       );
-      if (en_descriptions.length > 0) {
-        return en_descriptions[0].value;
+      if (lang_descriptions.length > 0) {
+        return lang_descriptions[0].value;
       }
     }
     return undefined;

@@ -17,18 +17,19 @@ You will need to have NodeJS 18.16+ to develop and/or run this project on a loca
 3. `npm i` to load dependencies.
 4. For development, look at `package.json`'s `scripts` for available `npm` scripts
    - of special interest is the `npm run build` command, which builds this project into a single `index.js` file that contains all the necessary code and libraries to run as a Github action.
-5. Run `./cves.sh --help` for help on using the commands.
+5. Run `./cves.sh --help`[^1] for help on using the commands.
 
-Some functions (e.g., `update` and `delta` require a `/cves` directory at the same location as `cves.sh` to work.  To develop/test these functions, you will need to
+Some functions (e.g., `update` and `delta` require a `/cves` directory at the same location as `cves.sh`[^1] to work.  To develop/test these functions, you will need to
 
 1. fork [CVEProject/cvelistV5](https://github.com/CVEProject/cvelistV5)
 2. clone the fork to your local workstation and `cd` into it
-3. `cp <cvelist-bulk-download-root>/.cves.sh .`
+3. `cp <cvelist-bulk-download-root>/.cves.sh .`[^1]
 4. `cp <cvelist-bulk-download-root>/.env .`
 5. whenever you compile the Bulk Download Utility (e.g., step 4 above) you will need to do:
    - `rm -r ./dist`
    - `cp <cvelist-bulk-download-root>/dist .`
-6. Run `./cves.sh` in the root directory of this project 
+6. Run `./cves.sh`[^1] in the root directory of this project 
+
 
 ## Setup for Running CVE Utils as Github Actions
 
@@ -94,3 +95,6 @@ This project uses (either verbatim or modified from) the following projects:
 2. [Quicktype](https://quicktype.io/) to convert CVE schemas to usable Typescript classes. Specifically, all classes in `src/generated/quicktype` are all generated this way:
    - `Cve5`: https://raw.githubusercontent.com/CVEProject/cve-services/dev/schemas/cve/create-full-cve-record-request.json
 3. [recommended tsconfig](https://github.com/tsconfig/bases#centralized-recommendations-for-tsconfig-bases)
+
+
+[^1]: To ensure compatability with DOS/Windows based operating systems, we have provided `./cves.bat` as an alternative for `./cves.sh`.

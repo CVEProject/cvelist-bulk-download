@@ -14,6 +14,7 @@
 import add from 'date-fns/add';
 export const IsoDateStringRegEx =
   /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/;
+export const GregorianLeapDateRegEx = /\d{4}-02-29/; // allows for any 4 digit year
 
 export class IsoDateString {
   _isoDateString: string = '';
@@ -38,6 +39,15 @@ export class IsoDateString {
       this._date = new Date(Date.parse(this._isoDateString));
     } else {
       throw new TypeError(`Invalid ISO Date string:  ${isoDateStr}`);
+    }
+
+    if ((GregorianLeapDateRegEx).test(isoDateStr)) {
+      let yr = parseInt(isoDateStr.substr(0, 4));
+      // leap year: the year number must be divisible by four – except for end-of-century years, which must be divisible by 400.
+      if (yr % 4 != 0 || (yr % 100 == 0 ? yr % 400 != 0 : false)) {
+        // We raise an error on non gregorian leap year here rather than allow ourselves to mimic the Date's default behavior to ensure sanity.
+        throw TypeError(`Invalid leap date! Please convert to proper date and try again!`);
+      }
     }
   }
 

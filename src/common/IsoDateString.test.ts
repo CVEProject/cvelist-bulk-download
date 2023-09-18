@@ -83,6 +83,24 @@ describe(`IsoDateString`, () => {
     }).toThrow(TypeError);
   });
 
+  it(`constructor handles leap years successfully`, () => {
+    // iter v2
+    let validLeapYears = [2000, 2004, 2008, 2024, 2400, 2484, 2492, 3200];
+    let invalidLeapYears = [1700, 1800, 1900, 2001, 2002, 2003, 2005, 2006, 2007, 2019, 2099, 2381];
+    validLeapYears.forEach(validYear => {
+      expect(() => {
+        new IsoDateString(`${validYear}-02-29T01:02:03.004Z`);
+      }).not.toThrow(TypeError);
+    });
+
+    invalidLeapYears.forEach(invalidYear => {
+      expect(() => {
+        new IsoDateString(`${invalidYear}-02-29T01:02:03.004Z`);
+      }).toThrow(TypeError);
+
+    });
+  });
+
   it(`fromDate() can create a new IsoDateString`, () => {
     const ticks1970 = 1682789845144;
     const date = new Date(ticks1970);
