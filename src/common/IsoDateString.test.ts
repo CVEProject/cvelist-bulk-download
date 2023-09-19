@@ -97,8 +97,12 @@ describe(`IsoDateString`, () => {
       expect(() => {
         new IsoDateString(`${invalidYear}-02-29T01:02:03.004Z`);
       }).toThrow(TypeError);
-
     });
+
+    expect(() => {
+      new IsoDateString(`2019-02-28T01:02:03.004Z`);
+    }).not.toThrow(TypeError);
+
   });
 
   it(`fromDate() can create a new IsoDateString`, () => {
