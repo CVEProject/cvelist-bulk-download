@@ -54,7 +54,7 @@ export class CveRecord implements CveRecordV5 {
    *  @returns a CveRecord
    */
   static fromCveId(cve_id: string | CveId, cves_directory?:string): CveRecord | undefined {
-     console.log(`cve_id=${cve_id}`)
+    console.log(`cve_id=${cve_id}`)
     const cveId = new CveId(cve_id)
     let path
     if ( !cves_directory ) {
@@ -63,7 +63,7 @@ export class CveRecord implements CveRecordV5 {
     else {
       path = `${cves_directory}/${cveId.getCvePath()}.json`
     }
-     console.log(`path=${path}`)
+    console.log(`path=${path}`)
     return CveRecord.fromJsonFile(path)
   }
 
