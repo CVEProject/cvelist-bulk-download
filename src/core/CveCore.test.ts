@@ -35,16 +35,21 @@ describe(`CveCore`, () => {
     expect(CveCore.getCveIdfromRepositoryFilePath('file.json')).toMatch(``);
   });
 
-  it(`fromRepositoryFilePath() properly creates a CveCore`, async () => {
+
+  it(`fromRepositoryFilePath() properly returns a CveCore`, async () => {
     let obj = CveCore.fromRepositoryFilePath(
-      `preview_cves/2016/15xxx/CVE-2016-15029.json`,
+      `cves/1999/0xxx/CVE-1999-0001.json`,
     );
-    expect(obj.cveId.id).toEqual(`CVE-2016-15029`);
-    obj = CveCore.fromRepositoryFilePath(
-      `/Users/abc/preview_cves/2020/21xxx/CVE-2020-21365.json`,
-    );
-    expect(obj.cveId.id).toEqual(`CVE-2020-21365`);
+    expect(obj.cveId.id).toEqual(`CVE-1999-0001`);
   });
+
+  it(`fromRepositoryFilePath() properly returns a CveCore even when the specified path is not a standard CVE repository as long as the filename (minus the extension) is a proper CVE ID`, async () => {
+    let obj = CveCore.fromRepositoryFilePath(
+      `/arbitrary/path/to/cve/file/2020/CVE-1999-0001.json`,
+    );
+    expect(obj.cveId.id).toEqual(`CVE-1999-0001`);
+  });
+
 
   it(`fromRepositoryFilePath() throws errors if improper CVE ID`, async () => {
     expect(() => {
