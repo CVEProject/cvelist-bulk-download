@@ -81,12 +81,8 @@ export class CveCorePlus extends CveCore {
    */
   static fromCveCore(cveCore: CveCore): CveCorePlus {
     const obj = new CveCorePlus(cveCore?.cveId);
-    obj.state = cveCore?.state;
-    obj.assignerOrgId = cveCore?.assignerOrgId;
-    obj.assignerShortName = cveCore?.assignerShortName;
-    obj.dateReserved = cveCore?.dateReserved;
-    obj.datePublished = cveCore?.datePublished;
-    obj.dateUpdated = cveCore?.dateUpdated;
+    const json = JSON.parse(JSON.stringify(cveCore));
+    obj.set(json)
     return obj;
   }
 
@@ -98,17 +94,17 @@ export class CveCorePlus extends CveCore {
    */
   static fromCveRecord(cve: CveRecord): CveCorePlus {
     const obj = new CveCorePlus(cve?.cveId);
-    obj.state = cve?.cveMetadata?.state;
-    obj.assignerOrgId = cve?.cveMetadata?.assignerOrgId;
-    obj.assignerShortName = cve?.cveMetadata?.assignerShortName;
-    obj.dateReserved = cve?.cveMetadata?.dateReserved;
-    obj.datePublished = cve?.cveMetadata?.datePublished;
-    obj.dateUpdated = cve?.cveMetadata?.dateUpdated;
+    obj.set(cve)
     obj.description = cve?.getDescription();
     return obj;
   }
 
   // ----- accessors and mutators ----- ----- ----- -----
+
+  set(metadata: Partial<CveMetadata>): void {
+    super.set(metadata);
+    this.description = metadata?.description;
+  }
 
   /**
    * update CveCorePlus with additional data from the repository

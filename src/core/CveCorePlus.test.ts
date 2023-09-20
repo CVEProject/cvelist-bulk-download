@@ -37,9 +37,17 @@ describe(`CveCorePlus`, () => {
   });
 
 
-
-
-
+  it(`fromCveMetadata() properly creates a CveCorePlus from a CveMetadata`, async () => {
+    const cve = new CveCore(kCve1999_0001.cveId);
+    cve.set(kCve1999_0001);
+    // console.log(cve);
+    expect(cve.cveId.id).toEqual(kCve1999_0001.cveId);
+    expect(cve['description']).toBeUndefined();
+    const cvep = CveCorePlus.fromCveCore(cve);
+    // console.log(cvep);
+    expect(cvep.cveId.id).toEqual(kCve1999_0001.cveId);
+    expect(cvep.description).toBeUndefined();
+  });
 
   it(`fromCveCore() properly creates a CveCorePlus from a CveCore`, async () => {
     const cve = new CveCore(kCve1999_0001.cveId);

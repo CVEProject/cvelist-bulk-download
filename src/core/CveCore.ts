@@ -56,7 +56,14 @@ export class CveCore {
     this.dateUpdated = metadata?.dateUpdated;
   }
 
-  // updateFromJsonString(jsonstr: string) {}
+  updateFromJsonString(jsonstr: string) {
+    const json = JSON.parse(jsonstr);
+    const cveId = json['cveId'];
+    if (cveId) {  // this is right now the only required property
+      this.cveId = cveId;
+      this.set(json);
+    }
+  }
 
   /**
    * returns the CveId from a full or partial path (assuming the file is in the repository directory)

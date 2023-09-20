@@ -29,6 +29,18 @@ describe(`CveCore`, () => {
     expect(obj.cveId.id).toEqual(kCve1999_0001.cveId);
   });
 
+  it(`set() properly sets the cvecore's properties`, () => {
+    const obj = new CveCore(kCve1999_0001.cveId);
+    obj.set(kCve1999_0001);
+    expect(JSON.stringify(obj)).toEqual(JSON.stringify(kCve1999_0001));
+  });
+
+  it(`updateFromJsonString() properly resets the cvecore's properties`, () => {
+    const obj = new CveCore(`CVE-1970-0099`);
+    obj.updateFromJsonString(JSON.stringify(kCve1999_0001));
+    expect(JSON.stringify(obj)).toEqual(JSON.stringify(kCve1999_0001));
+  })
+
   it(`getCveIdfromRepositoryFilePath() properly returns an empty string if path does not point to a valid CVE object`, async () => {
     expect(CveCore.getCveIdfromRepositoryFilePath(undefined)).toMatch(``);
     expect(CveCore.getCveIdfromRepositoryFilePath(null)).toMatch(``);
