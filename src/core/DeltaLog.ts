@@ -16,44 +16,17 @@ import path from 'path';
 import { Delta, DeltaOutpuItem } from './Delta.js';
 import { IsoDateString } from '../common/IsoDateString.js';
 
-// export interface DeltaLogOptions {
-//   path?: string,
-//   filename?: string,
-//   // mode?: "prepend" | "append";
-//   logCurrentActivity?: boolean;
-//   logAlways?: boolean;
-//   logKeepPrevious?: boolean;
-// }
-
 export class DeltaLog extends Array<Delta>{
 
   static kDeltaLogFilename = `deltaLog.json`;
   static kDeltaLogFile = `cves/${DeltaLog.kDeltaLogFilename}`;
-  // _options: DeltaLogOptions;
-  // _fullpath: string =
-  // _deltas: Delta[] = [];
 
   // ----- constructor and factory functions ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 
-  constructor(/* options: DeltaLogOptions */) {
+  /** constructor */
+  constructor() {
     super();
-    // this._options = options;
-    // this._options.path = options.path || `.`;
-    // this._options.filename = options.filename || `./test/activities_recent.json`;
-    // // this._options.mode = options.mode || `prepend`;
-    // this._options.logAlways = options.logAlways || false;
-    // this._options.logKeepPrevious = options.logKeepPrevious || false;
     // this._fullpath = `${this._options.path}/${this._options.filename}`;
-
-    // console.log(`DeltaLog constructor:  options=${JSON.stringify(this)}`)
-    // console.log(`options=`, this._options);
-    // if (this._options.logKeepPrevious) {
-    // this._deltas = DeltaLog.readFile(this._fullpath);
-    // }
-    // else {
-    //   // fs.unlinkSync(this._fullpath);
-    //   this.clearActivities();
-    // }
   }
 
   /** constructs a DeltaLog by reading in the deltaLog file 
@@ -105,10 +78,12 @@ export class DeltaLog extends Array<Delta>{
     this.unshift(delta);
   }
 
-  /** sorts the Deltas in place by date 
-   *  @param direction: "latestFirst" | "latestLast"
+  /** sorts the Deltas in place by the `fetchTime` property
+   *  @param direction: one of 
+   *            - "latestFirst" - reverse chronological order (default)
+   *            - "latestLast" - chronological order
   */
-  sortByFetchTme(direction: "latestFirst" | "latestLast"): DeltaLog {
+  sortByFetchTme(direction: "latestFirst" | "latestLast" = "latestFirst"): DeltaLog {
     return this.sort((a, b) => {
       const d1 = a.fetchTime ? new Date(a.fetchTime) : new Date();
       const d2 = b.fetchTime ? new Date(b.fetchTime) : new Date();
