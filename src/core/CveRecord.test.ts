@@ -1,10 +1,6 @@
-import * as dotenv from 'dotenv';
-
 import { CveRecord } from './CveRecord.js';
 import { CveService } from '../net/CveService.js';
 import { FsUtils } from './fsUtils.js';
-
-dotenv.config();
 
 describe(`CveRecord object`, () => {
 

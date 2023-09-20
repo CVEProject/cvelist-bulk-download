@@ -1,6 +1,4 @@
 import { CveId, CveIdError } from './CveId.js';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 describe(`CveId`, () => {
 

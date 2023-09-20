@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv';
 import fs from 'fs';
 
 import { CveCorePlus } from './CveCorePlus.js';
@@ -17,8 +16,6 @@ import * as _kTestCve0002u2 from '../../test/fixtures/cve/5/CVE-1970-0002u2.json
 
 import * as _kTestCve9999 from '../../test/fixtures/cve/5/CVE-1970-9999.json';
 import { FsUtils } from './fsUtils.js';
-
-dotenv.config();
 
 const kFixturesDir = `test/fixtures/cve/5`;
 const kTestDir = `test/pretend_github_repository/1970/0xxx`;

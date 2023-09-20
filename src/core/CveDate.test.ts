@@ -1,9 +1,6 @@
-import * as dotenv from 'dotenv';
 import { differenceInCalendarDays, parse } from 'date-fns';
 
 import { CveDate } from './CveDate.js';
-
-dotenv.config();
 
 describe(`CveDate`, () => {
 

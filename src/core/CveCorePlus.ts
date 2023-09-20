@@ -7,7 +7,6 @@
  */
 
 import fs from 'fs';
-import * as dotenv from 'dotenv';
 
 import { CveId } from './CveId.js';
 import { CveCore } from './CveCore.js';
@@ -17,8 +16,6 @@ import { FsUtils } from './fsUtils.js';
 
 export { CveId } from './CveId.js';
 export { CveCore } from './CveCore.js';
-
-dotenv.config();
 
 export class CveCorePlus extends CveCore {
   description?: string;

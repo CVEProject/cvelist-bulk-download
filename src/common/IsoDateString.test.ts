@@ -1,7 +1,4 @@
-import * as dotenv from 'dotenv';
 import { IsoDateStringRegEx, IsoDateString } from './IsoDateString.js';
-
-dotenv.config();
 
 describe(`IsoDateString`, () => {
   it(`constructor should construct a new object if param is properly formatted`, () => {

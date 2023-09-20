@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv';
 import fs from 'fs';
 
 import { FsUtils } from './fsUtils.js';
@@ -8,8 +7,6 @@ const kTestFixtureCve0001 = './test/fixtures/cve/5/CVE-1970-0001.json';
 const kTestFixtureCve0001u = './test/fixtures/cve/5/CVE-1970-0001u.json';
 const kTestFixtureCve0002 = './test/fixtures/cve/5/CVE-1970-0002.json';
 const kTestRepoCve0003 = './test/pretend_github_repository/1970/0xxx/CVE-1970-0003.json';
-
-dotenv.config();
 
 describe(`FileSystem`, () => {
 

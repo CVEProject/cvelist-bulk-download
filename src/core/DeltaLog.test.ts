@@ -1,7 +1,5 @@
 import fs from 'fs';
 
-// import * as dotenv from 'dotenv';
-
 import { CveId, CveCorePlus } from './CveCorePlus.js';
 import { Delta, DeltaQueue } from './Delta.js';
 import { DeltaLog } from './DeltaLog.js';
@@ -17,8 +15,6 @@ const kDelta_n_0001: Delta = new Delta({
   new: [kTestCve0001],
   updated: []
 });
-
-// dotenv.config();
 
 describe(`DeltaLog`, () => {
 

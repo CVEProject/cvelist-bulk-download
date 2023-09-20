@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv';
 import fs from 'fs';
 
 import { Git, StatusResult } from './git.js';
@@ -6,8 +5,6 @@ import { CveCore } from './CveCore.js';
 
 import * as _kTestCve0003 from '../../test/pretend_github_repository/1970/0xxx/CVE-1970-0002.json';
 import { FsUtils } from './fsUtils.js';
-
-dotenv.config();
 
 describe(`Git`, () => {
 
