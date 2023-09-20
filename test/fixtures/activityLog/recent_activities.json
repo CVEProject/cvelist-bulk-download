@@ -15,7 +15,7 @@
           "cveId": "CVE-2023-31996"
         }
       ],
-      "unknown": []
+      "error": []
     },
     "steps": [
       {
@@ -71,7 +71,7 @@
           "cveId": "CVE-2022-46945"
         }
       ],
-      "unknown": []
+      "error": []
     },
     "steps": [
       {

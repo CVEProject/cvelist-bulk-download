@@ -174,7 +174,7 @@ export class Git {
               delta.add(CveCorePlus.fromJsonFile(path), DeltaQueue.kUpdated);
               break;
             default:
-              delta.add(CveCorePlus.fromJsonFile(path), DeltaQueue.kUnknown);
+              delta.add(CveCorePlus.fromJsonFile(path), DeltaQueue.kError);
               break;
           }
         }

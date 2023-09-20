@@ -17,7 +17,7 @@
         "dateUpdated": "2023-07-24T17:32:04.394Z"
       }
     ],
-    "unknown": []
+    "error": []
   },
   {
     "fetchTime": "2023-07-24T17:14:04.394Z",
@@ -38,7 +38,7 @@
         "dateUpdated": "2023-07-24T17:12:04.394Z"
       }
     ],
-    "unknown": []
+    "error": []
   },
   {
     "fetchTime": "2023-07-24T17:02:00.394Z",
@@ -52,6 +52,6 @@
       }
     ],
     "updated": [],
-    "unknown": []
+    "error": []
   }
 ]

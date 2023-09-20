@@ -105,7 +105,7 @@ describe(`Delta`, () => {
     const delta = await Delta.newDeltaFromGitHistory(startDate, null, process.env.CVES_TEST_BASE_DIRECTORY);
     const deltaNow = await Delta.newDeltaFromGitHistory(startDate, new Date().toISOString(), process.env.CVES_TEST_BASE_DIRECTORY);
     expect(delta.numberOfChanges).toBe(deltaNow.numberOfChanges);
-    expect(delta.unknown).toEqual(deltaNow.unknown);
+    expect(delta.error).toEqual(deltaNow.error);
     await cleanup_TestGitRepository()
   });
 

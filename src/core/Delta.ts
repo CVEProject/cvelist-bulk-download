@@ -28,7 +28,7 @@ export enum DeltaQueue {
   kNew = 1,
   kPublished,
   kUpdated,
-  kUnknown
+  kError
 }
 
 /**
@@ -63,7 +63,7 @@ export class DeltaOutpuItem {
 
   static replacer(key: string, value: any) {
     let items = [];
-    if (key === 'new' || key === 'updated' || key === 'unknown') {
+    if (key === 'new' || key === 'updated' || key === 'error') {
       value.forEach((item: CveCorePlus) => {
         // Note, it is important to keep this loop as simple as possible,
         //  don't rely on item being an actual CveCorePlus object since
@@ -106,7 +106,7 @@ export class Delta {
   numberOfChanges: number = 0;
   new: CveCorePlus[] = [];
   updated: CveCorePlus[] = [];
-  unknown?: CveCorePlus[] = []; // for any CVE that is not new or updated, which should never be the case except for errors
+  error?: CveCorePlus[] = []; // for any CVE that is not new or updated, which should never be the case except for errors
 
   // ----- constructor and factory functions ----- ----- 
 
@@ -124,7 +124,7 @@ export class Delta {
       this.new = prevDelta?.new ? cloneDeep(prevDelta.new) : [];
       // this.published = prevDelta?.published ? cloneDeep(prevDelta.published) : [];
       this.updated = prevDelta?.updated ? cloneDeep(prevDelta.updated) : [];
-      this.unknown = prevDelta?.unknown ? cloneDeep(prevDelta.unknown) : [];
+      this.error = prevDelta?.error ? cloneDeep(prevDelta.error) : [];
     }
   }
 
@@ -141,7 +141,7 @@ export class Delta {
     const delta = await git.logDeltasInTimeWindow(start, stop);
     // files.forEach(element => {
     //   const tuple = Delta.getCveIdMetaData(element);
-    //   delta.add(new CveCore(tuple[0]), DeltaQueue.kUnknown);
+    //   delta.add(new CveCore(tuple[0]), DeltaQueue.kError);
     // });
     return delta;
   }
@@ -241,7 +241,7 @@ export class Delta {
     return this.new.length
       // + this.published.length
       + this.updated.length
-      + this.unknown.length;
+      + this.error.length;
   }
 
   /** adds a cveCore object into one of the queues in a delta object
@@ -266,8 +266,8 @@ export class Delta {
         break;
       default:
         if (cve.cveId) {
-          console.log(`pushing into unknown:  ${JSON.stringify(cve)}`);
-          this.unknown.push(cve);
+          console.log(`pushing into error list:  ${JSON.stringify(cve)}`);
+          this.error.push(cve);
         }
         else {
           console.log(`ignoring cve=${JSON.stringify(cve)}`);
@@ -284,16 +284,16 @@ export class Delta {
     const updatedCves: string[] = [];
     this.updated.forEach(item => updatedCves.push(item.cveId.id));
     const unkownFiles: string[] = [];
-    this.unknown.forEach(item => unkownFiles.push(item.cveId.id));
+    this.error.forEach(item => unkownFiles.push(item.cveId.id));
     let s = `${this.new.length} new | ${this.updated.length} updated`;
-    if (this.unknown.length > 0) {
-      s += ` | ${this.unknown.length} other files`;
+    if (this.error.length > 0) {
+      s += ` | ${this.error.length} other files`;
     }
     const retstr =
       `${this.numberOfChanges} changes (${s}):
       - ${this.new.length} new CVEs:  ${newCves.join(', ')}
       - ${this.updated.length} updated CVEs: ${updatedCves.join(', ')}
-      ${this.unknown.length > 0 ? `- ${this.unknown.length} other files: ${unkownFiles.join(', ')}` : ``}
+      ${this.error.length > 0 ? `- ${this.error.length} other files: ${unkownFiles.join(', ')}` : ``}
     `;
     return retstr;
   }
