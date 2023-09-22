@@ -1,2 +1,2 @@
 @echo off
-node ./dist/index.js "%1"
+node ./dist/index.js %*
