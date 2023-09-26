@@ -1,7 +1,13 @@
 {
   "editor.formatOnSave": true,
-  "typescript.format.semicolons": "insert",
-  "prettier.singleQuote": true,
+  "editor.formatOnSaveMode": "modifications",
   "javascript.preferences.quoteStyle": "single",
-  "typescript.preferences.quoteStyle": "single"
+  "prettier.singleQuote": true,
+  "typescript.format.semicolons": "insert",
+  "typescript.preferences.quoteStyle": "single",
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#0f1193",
+    "activityBar.foreground": "#ffffff",
+  },
+  "workbench.editor.wrapTabs": true,
 }

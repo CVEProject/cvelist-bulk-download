@@ -1,10 +1,6 @@
-import * as dotenv from 'dotenv';
-
 import { ActivityLog } from './ActivityLog.js';
 import { activity0, activity1, activity2, activityNone } from './Activity.test.js';
 import { FsUtils } from './fsUtils.js';
-
-dotenv.config();
 
 describe(`ActivityLog`, () => {
 

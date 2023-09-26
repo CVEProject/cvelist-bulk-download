@@ -1,8 +1,4 @@
-import * as dotenv from 'dotenv';
-
 import { CveService } from './CveService.js';
-
-dotenv.config();
 
 describe(`CveService`, () => {
 

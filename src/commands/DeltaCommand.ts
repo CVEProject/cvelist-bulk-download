@@ -15,8 +15,8 @@ export class DeltaCommand extends GenericCommand {
       .command(name)
       .description('cve deltas (cve file changes)')
       .option(
-        '--after <ISO timestamp>',
-        'show CVEs changed since <timestamp>, defaults to UTC midnight of today',
+        '--start <ISO timestamp>',
+        'show CVEs changed starting from <ISO timestamp>, defaults to UTC midnight of today',
         `${CveDate.getMidnight().toISOString()}`,
       )
       .option(
@@ -30,7 +30,6 @@ export class DeltaCommand extends GenericCommand {
   async run(options) {
     super.prerun(options);
 
-    
     if (options.yesterdayAll) {
       const timestamp = startOfYesterday();
       const delta = await Delta.newDeltaFromGitHistory(
@@ -47,7 +46,7 @@ export class DeltaCommand extends GenericCommand {
       delta.writeTextFile(`release_notes.md`);
     } else {
       const timestamp = new Date();
-      const delta = await Delta.newDeltaFromGitHistory(options.after);
+      const delta = await Delta.newDeltaFromGitHistory(options.start);
       // console.log(`delta=${JSON.stringify(delta, null, 2)}`);
       console.log(delta.toText());
       const date = format(timestamp, 'yyyy-MM-dd');
