@@ -14,11 +14,15 @@ describe(`GenericCommand`, () => {
   it(`correctly resets the timer to the current timestamp (close enough)`, async () => {
     const program = new Command();
     const cmd = new SimpleTestCommand(program);
-    const now = Date.now();
     expect(cmd._name).toMatch('test');
     expect(cmd._program).toBe(program);
-    // can't gurantee the difference to be 0, so using a larger range
-    expect(cmd.timerReset() - now).toBeLessThan(5);
+    // time based issues cant garuntee deterministic runs, 
+    // for now check in a more deterministic way.
+    const before = Date.now();
+    const during = cmd.timerReset();
+    const after = Date.now();
+    expect(before).toBeLessThanOrEqual(during);
+    expect(after).toBeGreaterThanOrEqual(during);
   });
 
 

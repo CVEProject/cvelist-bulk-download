@@ -4,6 +4,9 @@
  */
 
 import process from 'process';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 
 export class CveIdError extends Error { }
 
@@ -23,7 +26,7 @@ export class CveId {
   // constructors and factories
 
   /**
-   * @param id a string representing a CVE ID (e.g., CVE-1999-0001)
+   * @param id a CveId instance or a string representing a CVE ID (e.g., CVE-1999-0001)
    * @throws CveIdError if id is not a valid CVE ID
    */
   constructor(id: string | CveId) {
@@ -59,6 +62,15 @@ export class CveId {
    */
   getFullCvePath(): string {
     return `${process.cwd()}/${process.env.CVES_BASE_DIRECTORY}/${CveId.toCvePath(this.id)}`;
+  }
+
+  /**
+   * returns the official CVEProject/cvelistV5 URL to this CVE ID
+   */
+  getRawGithubUrl(/*official=true*/): string {
+    // if ( official ) {
+    return `https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/${CveId.getCveDir(this.id)}/${this.id}.json`;
+    // }
   }
 
   // ----- static functions ----- ----- ----- -----
@@ -152,10 +164,10 @@ export class CveId {
     }
   }
 
-  /** given a cveId, returns the git hub repository partial path (directory and filename without extension) it should go into 
+  /** given a cveId, returns the git hub repository partial path (directory and filename without extension) it should go into
    *  @param cveId string representing the CVE ID (e.g., CVE-1999-0001)
    *  @returns string representing the partial path the cve belongs in (e.g., /1999/1xxx/CVE-1999-0001)
-  */
+   */
   static toCvePath(cveId: string | CveId): string {
     // const id = (cveId instanceof CveId) ? cveId.id : cveId;
     const dir = CveId.getCveDir(cveId);

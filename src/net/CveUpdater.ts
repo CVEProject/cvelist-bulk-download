@@ -18,6 +18,8 @@ export const kActivity_UpdateByModificationDateWindow = 'UPDATE_BY_MODIFICATION_
 export const kActivity_UpdateByPage = 'UPDATE_BY_PAGE';
 export class CveUpdater {
 
+  static _recsPerPage: number = process.env.CVE_SERVICES_RECORDS_PER_PAGE ? parseInt(process.env.CVE_SERVICES_RECORDS_PER_PAGE) : 500;
+
   /** repository base path */
   _repository_base = `${process.env.CVES_BASE_DIRECTORY}`;
   _release_note_path = `${this._repository_base}/release_notes.md`;
@@ -56,7 +58,7 @@ export class CveUpdater {
   async getFirstCvesFrame(
     startWindow: string,
     endWindow: string,
-    max: number = 500,
+    max: number = CveUpdater._recsPerPage,
     writeDir: string | undefined = undefined
   ): Promise<ActivityStep | undefined> {
     if (startWindow == endWindow) {
@@ -127,7 +129,7 @@ export class CveUpdater {
   async getCvesInWindow(
     startWindow: string,
     endWindow: string,
-    max: number = 500,
+    max: number = CveUpdater._recsPerPage,
     writeDir: string | undefined = undefined
   ): Promise<Activity> {
     const timestampStart = Date.now();

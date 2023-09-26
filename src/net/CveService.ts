@@ -91,7 +91,7 @@ export class CveService extends ApiBaseService {
         // remove initial ? if present
         url += `?${option.queryString.split('?')[0]}`;
       }
-      // console.log(`[cve]:  url=`, url);
+      // console.log(`cve-rest-service GET  `, url);
       const { data, status } = await axios.get(
         url,
         {

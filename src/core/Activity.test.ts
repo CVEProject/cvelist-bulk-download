@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv';
 import { cloneDeep } from 'lodash';
 import {
   ActivityStep,
@@ -7,8 +6,6 @@ import {
   ActivityProps
 } from './Activity.js';
 import { Delta } from './Delta.js';
-dotenv.config();
-
 
 export const defaultStep0: ActivityStep = {
   stepDescription: "step0",

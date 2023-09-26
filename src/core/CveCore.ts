@@ -1,43 +1,68 @@
 /**
- *  CveCore is made up of mostly the metadata portion of a CVE JSON 5 object
- *    plus (eventually) of additional metadata (such as SHA) that is useful for managing/validating CVEs
+ *  CveCore is made up of the metadata portion of a CVE JSON 5 object
+ *  Note that it is convenient to store additional data for some operations,
+ *  and for that, the CveCorePlus object should be used
  */
 
 import { CveId, CveIdError } from './CveId.js';
 import { CveMetadata } from '../generated/quicktools/CveRecordV5.js';
 import { CveRecord } from './CveRecord.js';
 // import { IsoDateString } from '../common/IsoDateString.js';
+import fs from 'fs';
 
 export { CveId, CveIdError } from './CveId.js';
 
-
 // @todo should change IsoDate to IsoDateString
-type IsoDate = string;  // note, not exported, not an IsoDateString yet
+type IsoDate = string; // note, not exported, not an IsoDateString yet
 
 export class CveCore {
   cveId: CveId;
-  state?: string;//"RESERVED" | "PUBLISHED" | "REJECTED";
+  state?: string; //"RESERVED" | "PUBLISHED" | "REJECTED";
   assignerOrgId?: string;
   assignerShortName?: string;
   dateReserved?: IsoDate;
   datePublished?: IsoDate;
   dateUpdated?: IsoDate;
 
-  // constructors and factories
+  // ----- constructors and factories ----- ----- ----- ----- -----
 
+  /**
+   * constructor which builds a minimum CveCore from a CveId or string
+   * @param cveId a CveId or string
+   */
   constructor(cveId: string | CveId) {
-    this.cveId = (cveId instanceof CveId) ? cveId : new CveId(cveId);
+    this.cveId = cveId instanceof CveId ? cveId : new CveId(cveId);
   }
 
+  /**
+   * builds a full CveCore using provided metadata
+   * @param metadata the CveMetadata in CVE JSON 5.0 schema
+   * @returns
+   */
   static fromCveMetadata(metadata: Partial<CveMetadata>): CveCore {
     const obj = new CveCore(metadata?.cveId);
-    obj.state = metadata?.state;
-    obj.assignerOrgId = metadata?.assignerOrgId;
-    obj.assignerShortName = metadata?.assignerShortName;
-    obj.dateReserved = metadata?.dateReserved;
-    obj.datePublished = metadata?.datePublished;
-    // obj.dateUpdated = metadata?.dateUpdated;
+    obj.set(metadata);
     return obj;
+  }
+
+  // ----- accessors and mutators ----- ----- ----- -----
+
+  set(metadata: Partial<CveMetadata>): void {
+    this.state = metadata?.state;
+    this.assignerOrgId = metadata?.assignerOrgId;
+    this.assignerShortName = metadata?.assignerShortName;
+    this.dateReserved = metadata?.dateReserved;
+    this.datePublished = metadata?.datePublished;
+    this.dateUpdated = metadata?.dateUpdated;
+  }
+
+  updateFromJsonString(jsonstr: string) {
+    const json = JSON.parse(jsonstr);
+    const cveId = json['cveId'];
+    if (cveId) {  // this is right now the only required property
+      this.cveId = cveId;
+      this.set(json);
+    }
   }
 
   /**
@@ -54,7 +79,6 @@ export class CveCore {
     }
   }
 
-
   /**
    * returns the CveId from a full or partial path (assuming the file is in the repository directory)
    *  @param path the full or partial file path to CVE JSON file
@@ -67,7 +91,6 @@ export class CveCore {
     catch {
       throw new CveIdError(`Error in parsing repository file path:  ${path}`);
     }
-
   }
 
   /** returns a CveCore object from a CveRecord */
@@ -75,13 +98,7 @@ export class CveCore {
     return this.fromCveMetadata(cveRecord.cveMetadata);
   }
 
-  toJson(whitespace = 2): string {
-    return JSON.stringify(this, (k, v) => v ?? undefined, whitespace);
-  }
-
   getCvePath(): string {
     return this.cveId.getCvePath();
   }
-
-
 }
