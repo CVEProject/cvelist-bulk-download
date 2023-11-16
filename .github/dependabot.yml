@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Raise pull requests for version updates
+    # against the `develop` branch
+    target-branch: "develop"
+    # Labels on pull requests for version updates only
+    labels:
+      - "dependabot"
+
