@@ -194,12 +194,14 @@ describe(`Delta`, () => {
   it(`calculateDelta() properly calculates a Delta`, async () => {
     await setup_TestGitRepository();
     const delta = await Delta.calculateDelta({}, `test/pretend_github_repository`);
-    console.log(`delta=${JSON.stringify(delta, null, 2)}`);
-    console.log(`delta.toText() -> ${delta.toText()}`);
+    const deltaText = delta.toText();
+    // console.log(`delta=${JSON.stringify(delta, null, 2)}`);
+    // console.log(`delta.toText() -> ${deltaText}`);
 
     expect(delta.numberOfChanges).toBe(2);
     expect(delta.new.length).toBe(1);
     expect(delta.updated.length).toBe(1);
+    expect(deltaText.startsWith(`2 changes (1 new | 1 updated):`)).toBeTruthy()
 
     await cleanup_TestGitRepository();
   });
@@ -209,7 +211,7 @@ describe(`Delta`, () => {
     await setup_TestGitRepository()
     const delta = await Delta.calculateDelta({}, `test/pretend_github_repository`);
     // console.log(`delta=${JSON.stringify(delta, null, 2)}`);
-    console.log(`delta.toText() -> ${delta.toText()}`);
+    // console.log(`delta.toText() -> ${delta.toText()}`);
 
     expect(delta.toText()).toContain(`${delta.numberOfChanges} changes`);
     expect(delta.toText()).toContain(`${delta.new.length} new`);
@@ -219,7 +221,33 @@ describe(`Delta`, () => {
   });
 
 
-  it(`writeFile() properl this Delta as a delta.json file`, async () => {
+  it(`toText() properly displays human readable text about this Delta when the delta is very large`, async () => {
+    const delta = new Delta();
+    let i = 0;
+    for (i = 1000; i < 5000; i++) {
+      delta.add(new CveCorePlus(`CVE-1970-${i}`), DeltaQueue.kNew);
+    }
+    for (i = 5000; i < 9000; i++) {
+      delta.add(new CveCorePlus(`CVE-1970-${i}`), DeltaQueue.kUpdated);
+    }
+    expect(delta.numberOfChanges).toBe(8000);
+    expect(delta.new.length).toBe(4000);
+    expect(delta.updated.length).toBe(4000);
+    const deltaText = delta.toText();
+    // console.log(`deltaText=${deltaText}`);
+    expect(deltaText).toContain(`${delta.numberOfChanges} changes`);
+    expect(deltaText).toContain(`${delta.new.length} new`);
+    expect(deltaText).toContain(`${delta.updated.length} updated`);
+    expect(deltaText.endsWith('CVE-1970-5361,...')).toBeTruthy();
+    expect(deltaText.length).toBeLessThanOrEqual(Delta.kMaxGithubCommitMessageLength);
+    // console.log(`last new cve in delta:  ${delta.new[delta.new.length - 1].cveId}`);
+    // console.log(`last updated cve in delta:  ${delta.new[delta.updated.length - 1].cveId}`);
+    // console.log(`test:  ${Delta.kMaxGithubCommitMessageLength - 10}`);
+    // console.log(`last few characters in toText():  ${deltaText.substring(Delta.kMaxGithubCommitMessageLength - 10)}`);
+  });
+
+
+  it(`writeFile() properly displays this Delta as a delta.json file`, async () => {
     const destDir = `test/temp/delta.json`;
     const delta = new Delta();
     delta.add(kTestCve0001, DeltaQueue.kNew);

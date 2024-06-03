@@ -49,7 +49,7 @@ describe(`CveService`, () => {
 
   it(`getAllCvesChangedInTimeFrame() gets correct set of CVEs`, async () => {
     const cveService = new CveService();
-    const cves = await cveService.getAllCvesChangedInTimeFrame('2022-10-14T17:00:00', '2022-10-14T17:10:00');
+    const cves = await cveService.getAllCvesChangedInTimeFrame('2022-10-14T15:00:00.000Z', '2022-10-14T17:00:00.000Z');
     expect(cves.length).toBeGreaterThanOrEqual(1);
   });
 
