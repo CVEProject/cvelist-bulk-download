@@ -15,7 +15,7 @@ import fs from 'fs';
 import path from 'path';
 import process from 'process';
 import { simpleGit, SimpleGit, StatusResult } from 'simple-git';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, truncate } from 'lodash';
 
 import { CveId, CveCore, CveCorePlus } from './CveCorePlus.js';
 import { Git } from './git.js';
@@ -100,6 +100,12 @@ export class DeltaOutpuItem {
 
 
 export class Delta {
+
+  /** max message length for github commit messages
+   *  needed to truncate commit message when too many CVEs
+   *  were changed
+   */
+  static kMaxGithubCommitMessageLength = 65536;
 
   fetchTime?: string;
   // durationInMsecs?: number;   // if not set, it means that it was not calculated
@@ -289,12 +295,20 @@ export class Delta {
     if (this.error.length > 0) {
       s += ` | ${this.error.length} other files`;
     }
-    const retstr =
+    let retstr =
       `${this.numberOfChanges} changes (${s}):
       - ${this.new.length} new CVEs:  ${newCves.join(', ')}
       - ${this.updated.length} updated CVEs: ${updatedCves.join(', ')}
       ${this.error.length > 0 ? `- ${this.error.length} other files: ${unkownFiles.join(', ')}` : ``}
     `;
+    if (retstr.length > Delta.kMaxGithubCommitMessageLength) {
+      //  the '- 4' in the length is to accommodate the ',...' that lodash.truncate
+      // adds to the string when truncating
+      retstr = truncate(retstr, {
+        'length': Delta.kMaxGithubCommitMessageLength - 4,
+        'separator': ' '
+      });
+    }
     return retstr;
   }
 
